@@ -9,13 +9,16 @@ class Store {
   final String storeName;
 
   /// prefer using with `Location`, not just using with longitude and latitude
-  final GeoLocation storeLocation;
+  // final GeoLocation storeLocation;
+  final double latitude;
+  final double longitude;
 
-  final DateTime createdOn;
+  final DateTime writtenDate;
 
   Store(
-      {required this.createdOn,
-      required this.storeLocation,
+      {required this.writtenDate,
+      required this.latitude,
+      required this.longitude,
       required this.storeName,
       required this.storeUID});
 

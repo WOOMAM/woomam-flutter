@@ -4,8 +4,8 @@ part 'geolocation.g.dart';
 
 @JsonSerializable()
 class GeoLocation {
-  final double latitude;
-  final double longitude;
+  final double latitude;  // 위도
+  final double longitude; // 경도
 
   GeoLocation({required this.latitude, required this.longitude});
 
