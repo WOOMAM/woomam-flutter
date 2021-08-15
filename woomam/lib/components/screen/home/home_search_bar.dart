@@ -44,6 +44,7 @@ class _HomeSearchBarState extends State<HomeSearchBar> {
           borderRadius: BorderRadius.circular(20.0),
           openAxisAlignment: 0.0,
           iconColor: primaryColor,
+          elevation: 1.0,
 
           /// animations
           transitionDuration: const Duration(milliseconds: 800),
