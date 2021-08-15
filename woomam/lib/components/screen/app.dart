@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../control_panel/control_panels.dart';
 
 /// pages
-import 'home.dart';
+import 'home/home.dart';
 import 'reservation.dart';
 import 'setting.dart';
 
