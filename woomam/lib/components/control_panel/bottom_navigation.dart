@@ -29,8 +29,15 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
       /// style
       dotIndicatorColor: primaryColor,
       selectedItemColor: primaryColor,
-      unselectedItemColor: unSelectedColor,
+      unselectedItemColor: secondaryColor,
       itemPadding: paddingLTRB(left: 16, right: 16, top: 8, bottom: 16),
+      boxShadow: const [
+        BoxShadow(
+            color: Colors.black26,
+            spreadRadius: 0,
+            blurRadius: 1,
+            offset: Offset(0, 1))
+      ],
 
       /// items displayed
       items: [
