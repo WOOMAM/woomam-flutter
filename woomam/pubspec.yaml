@@ -38,6 +38,7 @@ dependencies:
   location: ^4.3.0
   build_runner: ^2.1.0
   flutter_bloc: ^7.1.0
+  equatable: ^2.0.3
 
 dev_dependencies:
   flutter_test:
