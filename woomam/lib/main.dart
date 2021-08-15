@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:woomam/components/components.dart';
 
 /// pages
-import 'package:woomam/components/screen/home.dart';
+import 'package:woomam/components/screen/app.dart';
 
 /// component
 
