@@ -174,6 +174,7 @@ class _ReservationScreenState extends State<ReservationScreen> {
               children: [
                 Text(isEnabled ? '남은 시간: ${12}시간' : '빨래를 넣고 돌려보세요 🤩',
                     style: headlineTextStyle(color: Colors.white)),
+                    /// TODO: check the washing machine has closed well !
                 TextButton(
                   onPressed: _handleRunningButtonOnPressed,
                   child:

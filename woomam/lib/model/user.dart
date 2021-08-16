@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:woomam/model/washing_machine.dart';
 
 part 'user.g.dart';
 
@@ -7,13 +8,14 @@ class User {
   final String userName; // entered by user
   final String phoneNumber; // firebase
   final String userUID; // QR CODE, firebase UID
-  final DateTime writtenDate;
+  final int point; // user affordable point
 
-  User(
-      {required this.userName,
-      required this.phoneNumber,
-      required this.userUID,
-      required this.writtenDate});
+  User({
+    required this.userName,
+    required this.phoneNumber,
+    required this.userUID,
+    required this.point,
+  });
 
   /// handle [JSON]
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);

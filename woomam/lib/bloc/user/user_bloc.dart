@@ -24,10 +24,11 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     try {
       // TODO: make logic
       User temp = User(
-          userName: 'sample',
-          phoneNumber: 'sample',
-          userUID: 'sample',
-          writtenDate: DateTime.parse('2021-08-15'));
+        userName: 'sample',
+        phoneNumber: 'sample',
+        userUID: 'sample',
+        point: 0,
+      );
       yield UserLoaded(user: temp);
     } catch (e) {
       yield UserError(msg: e.toString());
@@ -50,10 +51,11 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     try {
       // TODO: make logic
       User temp = User(
-          userName: 'sample',
-          phoneNumber: 'sample',
-          userUID: 'sample',
-          writtenDate: DateTime.parse('2021-08-15'));
+        userName: 'sample',
+        phoneNumber: 'sample',
+        userUID: 'sample',
+        point: 0,
+      );
       yield UserLoaded(user: temp);
     } catch (e) {
       yield UserError(msg: e.toString());

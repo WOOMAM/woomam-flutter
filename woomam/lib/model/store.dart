@@ -12,10 +12,8 @@ class Store {
   final double latitude;
   final double longitude;
 
-  final DateTime writtenDate;
-
   Store(
-      {required this.writtenDate,
+      {
       required this.latitude,
       required this.longitude,
       required this.storeName,
