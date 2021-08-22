@@ -14,13 +14,13 @@ import './end_point.dart';
 /// will be managed with Firebase and main server(local)
 ///
 class UserRepository {
-  final wmurl = WoomamURL();
+  final ep = EndPoint();
 
   /// `POST`, [sign-up]
   /// the successful response returns the class of `User`
   Future<User> signUpuser({required User applicant}) async {
     /// make request
-    final url = Uri.parse(wmurl.signUp);
+    final url = Uri.parse(ep.signUp);
 
     /// wait for response
     final response = await http.post(url,
@@ -40,7 +40,7 @@ class UserRepository {
   /// the successful response returns the class of `User`
   Future<User> signInUser({required String userUID, phoneNumber}) async {
     /// make request
-    final url = Uri.parse(wmurl.signIn);
+    final url = Uri.parse(ep.signIn);
     final requestBody = {"userUID": userUID, "phoneNumber": phoneNumber};
 
     /// wait for response
@@ -60,7 +60,7 @@ class UserRepository {
   ///
   Future<bool> signOutUser({required String userToken}) async {
     /// make request
-    final url = Uri.parse(wmurl.signOut);
+    final url = Uri.parse(ep.signOut);
     final requestBody = {"token": userToken};
 
     /// wait for response

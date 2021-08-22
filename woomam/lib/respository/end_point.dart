@@ -1,5 +1,5 @@
 /// set the URL end points here
-class WoomamURL {
+class EndPoint {
   final String _baseURL = 'http://localhost:3000/';
 
   /// get `baseURL`
