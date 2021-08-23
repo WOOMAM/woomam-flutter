@@ -1,3 +1,7 @@
 
 *.lock
 *.xcconfig
+.idea/woomam-flutter.iml
+.idea/vcs.xml
+.idea/runConfigurations.xml
+.idea/modules.xml
