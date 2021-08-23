@@ -1,5 +1,4 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:woomam/model/washing_machine.dart';
 
 part 'user.g.dart';
 

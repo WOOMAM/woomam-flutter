@@ -23,8 +23,11 @@ class _HomeScreenState extends State<HomeScreen> {
           color: backgroundColor,
         ),
         /// search bar
-        HomeSearchBar(
-          onSeachButtonTapped: () {},
+        Padding(
+          padding: paddingHV(16, 8),
+          child: HomeSearchBar(
+            onSeachButtonTapped: () {},
+          ),
         ),
       ],
     );

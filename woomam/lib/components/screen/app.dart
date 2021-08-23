@@ -4,7 +4,7 @@ import '../control_panel/control_panels.dart';
 
 /// pages
 import 'home/home.dart';
-import 'reservation.dart';
+import 'washing_machine/reservation.dart';
 import 'setting.dart';
 
 class RootScreen extends StatefulWidget {
