@@ -23,6 +23,33 @@ class WashingMachineRepository {
   /// set end point manager class
   final ep = EndPoint();
 
+  /// [GET], get all washing machine states in specific store
+  ///
+  /// returns `List<WashingMachine>` when the request was successful
+  Future<List<WashingMachine>> getAllWashingMachinesFromSpecificStore({
+    required String storeUID,
+  }) async {
+    /// make `url` and `param`
+    final url = Uri.parse(ep.allWashingMachines + storeUID);
+
+    /// wait for response
+    final response = await http.get(url, headers: generateHeader(token: token));
+
+    /// parse the response
+    final parsedResponse = jsonDecode(utf8.decode(response.bodyBytes));
+    final bool parsedResult = parsedResponse['result'];
+    final String parsedMessage = parsedResponse['message'];
+
+    /// check the response
+    assert(response.statusCode == 200 && parsedResult,
+        'getAllWashingMachineFromSpecificStore request received msg from server : $parsedMessage');
+
+    /// parse the data and return
+    return (parsedResponse['data'] as List<dynamic>)
+        .map((e) => WashingMachine.fromJson(e))
+        .toList();
+  }
+
   /// [POST], make reservation
   ///
   /// returns `true` when the request was successful
