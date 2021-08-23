@@ -33,10 +33,10 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
       itemPadding: paddingLTRB(left: 16, right: 16, top: 8, bottom: 16),
       boxShadow: const [
         BoxShadow(
-            color: Colors.black26,
+            color: Color(0xFFCDCDCD),
             spreadRadius: 0,
-            blurRadius: 1,
-            offset: Offset(0, 1))
+            blurRadius: 16,
+            offset: Offset(3, 6))
       ],
 
       /// items displayed
