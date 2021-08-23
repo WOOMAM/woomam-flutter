@@ -24,7 +24,9 @@ class WashingMachineRepository {
   final ep = EndPoint();
 
   /// [POST], make reservation
-  Future<WashingMachine> reserveWashingMachine(
+  ///
+  /// returns `true` when the request was successful
+  Future<bool> reserveWashingMachine(
       {required String washingMachineUID, bookedTime, phoneNumber}) async {
     /// make `url` and `requestBody`
     final url = Uri.parse(ep.reserve);
@@ -38,14 +40,23 @@ class WashingMachineRepository {
     final response = await http.post(url,
         headers: generateHeader(token: token), body: jsonEncode(requestBody));
 
+    /// parse the response
+    final parsedResponse = jsonDecode(utf8.decode(response.bodyBytes));
+    final bool parsedResult = parsedResponse['result'];
+    final String parsedMessage = parsedResponse['message'];
+
     /// check response
-    assert(response.statusCode == 200,
-        'reserve statusCode was ${response.statusCode}');
-    return WashingMachine.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+    assert(response.statusCode == 200 && parsedResult,
+        'reserve request message from server was $parsedMessage');
+
+    /// which will be `true`
+    return parsedResult;
   }
 
   /// [POST], verify user's information
-  Future<WashingMachine> verifyUserWithQRCodeOfWashingMachine(
+  ///
+  /// returns `true` when the request was successful
+  Future<bool> verifyUserWithQRCodeOfWashingMachine(
       {required String washingMachineUID, phoneNumber}) async {
     /// make `url` and `requestBody`
     final url = Uri.parse(ep.qrCheck);
@@ -58,14 +69,23 @@ class WashingMachineRepository {
     final response = await http.post(url,
         headers: generateHeader(token: token), body: jsonEncode(requestBody));
 
+    /// parse the response
+    final parsedResponse = jsonDecode(utf8.decode(response.bodyBytes));
+    final bool parsedResult = parsedResponse['result'];
+    final String parsedMessage = parsedResponse['message'];
+
     /// check response
-    assert(response.statusCode == 200,
-        'qrcheck statusCode was ${response.statusCode}');
-    return WashingMachine.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+    assert(response.statusCode == 200 && parsedResult,
+        'qrcheck request message from server was $parsedMessage');
+
+    /// which will be `true`
+    return parsedResult;
   }
 
   /// [POST], run washing machine
-  Future<WashingMachine> runWashingMachine(
+  ///
+  /// returns `true` when the request was successful
+  Future<bool> runWashingMachine(
       {required WashingMachine washingMachine}) async {
     /// make `url`
     final url = Uri.parse(ep.runWashingMachine);
@@ -75,14 +95,23 @@ class WashingMachineRepository {
         headers: generateHeader(token: token),
         body: jsonEncode(washingMachine.toJson()));
 
+    /// parse the response
+    final parsedResponse = jsonDecode(utf8.decode(response.bodyBytes));
+    final bool parsedResult = parsedResponse['result'];
+    final String parsedMessage = parsedResponse['message'];
+
     /// check response
-    assert(response.statusCode == 200,
-        'Run Washing Machine statusCode was ${response.statusCode}');
-    return WashingMachine.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+    assert(response.statusCode == 200 && parsedResult,
+        'Run Washing Machine request message from server was $parsedMessage');
+
+    /// which will be `true`
+    return parsedResult;
   }
 
   /// [POST], initialize washing machine
-  Future<WashingMachine> initWashingMachine(
+  ///
+  /// returns `true` when the request was successful
+  Future<bool> initWashingMachine(
       {required String washingMachineUID, phoneNumber}) async {
     /// make `url` and `requestBody`
     final url = Uri.parse(ep.initWashingMachine);
@@ -95,9 +124,16 @@ class WashingMachineRepository {
     final response = await http.post(url,
         headers: generateHeader(token: token), body: jsonEncode(requestBody));
 
+    /// parse the response
+    final parsedResponse = jsonDecode(utf8.decode(response.bodyBytes));
+    final bool parsedResult = parsedResponse['result'];
+    final String parsedMessage = parsedResponse['message'];
+
     /// check response
-    assert(response.statusCode == 200,
-        'reserve statusCode was ${response.statusCode}');
-    return WashingMachine.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+    assert(response.statusCode == 200 && parsedResult,
+        'init request message from server was $parsedMessage');
+
+    /// which will be `true`
+    return parsedResult;
   }
 }
