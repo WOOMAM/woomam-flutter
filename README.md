@@ -25,12 +25,10 @@
 > 사용자는 본인인증을 위해 uid가 필요합니다. QR로 본인인증을 해야하므로 예약한 세탁기 앞에 도착했을 때 uid를 확인하므로써 세탁기가 열린 상태로 변하게 됩니다. `reservedWasher`에 해당 매장과 세탁기의 uid가 저장되어있기 때문에 사용자가 도착하고 QR인증을 합니다. 이때 서버에서는 `reservedWasher`안의 정보가 QR로 전달된 `washer`의 `uid`가 전달되므로 이를 비교해서 `response`값을 전달해줍니다.
 ``` dart
 class User {
-  String _uid;
-  String id;
-  String _pw;
-  String name;
-  String phoneNumber;
-  Washer? reservedWasher;
+  final String userName; // entered by user
+  final String phoneNumber; // firebase
+  final String userUID; // QR CODE, firebase UID
+  final int point; // user affordable point
 }
 ```
 
@@ -38,45 +36,44 @@ class User {
 > 가게 안에는 세탁기의 갯수가 여러개일 수 있으므로 list 형식으로 세탁기의 존재를 파악합니다. 후에 사용되고 있는 세탁기의 경우 `washers`안에 `running`중인 세탁기의 갯수를 파악해서 계산해 알려줍니다. 또한 `location`을 같이 저장하게 되어서 지도에 표시하기 쉽게 클래스안에 attribute로 넣어줍니다.
 ```dart
 class Store {
-  String storeName;
-  String _storeUID;
-  Geolocation location;
-  List<Washer> washers;
+  final String storeUID;
+  final String storeName;
+  final double latitude;
+  final double longitude;
 }
 ```
 
-#### Washer
+#### WashingMachine
 > `enum`을 사용하여 각 상태를 정의해두었습니다. 세탁기는 세탁기 현재 상태, 연결되는 아두이노 그리고 각 `uid`가 선언되어있습니다.
 ``` dart
-enum WasherState {
-  running,
-  turnedOff
+/// real washing machine
+enum WashingMachineState {
+  turnedOnOpened, // just turned on, not doing anything
+  // turnedOnClosed, // turned on and user has put laundry
+  running, // working
+  turnedOff, // dead
+}
+/// `solenoid` state
+enum ArduinoState {
+  opened,
+  closed,
 }
 ```
 
 ``` dart
 class Washer {
-  String _storeUID;
-  String _washerUID;
-  Arduino arduino;
-  WasherState washerState;
+  final String storeUID;
+  final String washingMachineUID;
+  final String? phoneNumber;
+  final DateTime? taskFrom;
+  final DateTime? taskTo;
+  final DateTime? bookedTime;
+  final QRState qrState;
+  final ArduinoState arduinoState;
+  final WashingMachineState washingMachineState;
 }
 ```
 
-#### Arduino
+#### ~~Arduino~~
 > `enum`을 사용하여 아두이노의 상태를 정의해두었습니다. 아두이노의 상태에 따라서 세탁기의 문이 2중 잠금이 됩니다. 아두이노도 마찬가지로 안에 각각의 `uid`가 선언되어 있습니다.
-``` dart
-enum ArduinoState {
-  opened,
-  closed
-}
-```
-
-```dart
-class Arduino {
-  String _arduinoUID;
-  String _washerUID;
-  String _storeUID;
-  ArduinoState arduinoState;
-}
-```
+> > Arduino class 가 삭제되었습니다. 0816
