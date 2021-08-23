@@ -6,16 +6,11 @@ part 'store.g.dart';
 class Store {
   final String storeUID;
   final String storeName;
-
-  /// prefer using with `Location`, not just using with longitude and latitude
-  // final GeoLocation storeLocation;
   final double latitude;
   final double longitude;
 
-  final DateTime writtenDate;
-
   Store(
-      {required this.writtenDate,
+      {
       required this.latitude,
       required this.longitude,
       required this.storeName,

@@ -7,7 +7,6 @@ part of 'store.dart';
 // **************************************************************************
 
 Store _$StoreFromJson(Map<String, dynamic> json) => Store(
-      writtenDate: DateTime.parse(json['writtenDate'] as String),
       latitude: (json['latitude'] as num).toDouble(),
       longitude: (json['longitude'] as num).toDouble(),
       storeName: json['storeName'] as String,
@@ -19,5 +18,4 @@ Map<String, dynamic> _$StoreToJson(Store instance) => <String, dynamic>{
       'storeName': instance.storeName,
       'latitude': instance.latitude,
       'longitude': instance.longitude,
-      'writtenDate': instance.writtenDate.toIso8601String(),
     };

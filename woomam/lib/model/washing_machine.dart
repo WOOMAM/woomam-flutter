@@ -8,19 +8,23 @@ part 'washing_machine.g.dart';
 class WashingMachine {
   final String storeUID;
   final String washingMachineUID;
-  final String? reservedPhoneNumber;
+  final String? phoneNumber;
   final DateTime? taskFrom;
   final DateTime? taskTo;
+  final DateTime? bookedTime;
+  final QRState qrState;
   final ArduinoState arduinoState;
-  final WashingMachineState washinMachineState;
+  final WashingMachineState washingMachineState;
 
   WashingMachine(
       {required this.arduinoState,
-      this.reservedPhoneNumber,
+      this.phoneNumber,
       required this.storeUID,
       this.taskFrom,
       this.taskTo,
-      required this.washinMachineState,
+      this.bookedTime,
+      required this.qrState,
+      required this.washingMachineState,
       required this.washingMachineUID});
 
   /// hanlde `JSON`

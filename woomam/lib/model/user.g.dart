@@ -10,12 +10,12 @@ User _$UserFromJson(Map<String, dynamic> json) => User(
       userName: json['userName'] as String,
       phoneNumber: json['phoneNumber'] as String,
       userUID: json['userUID'] as String,
-      writtenDate: DateTime.parse(json['writtenDate'] as String),
+      point: json['point'] as int,
     );
 
 Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'userName': instance.userName,
       'phoneNumber': instance.phoneNumber,
       'userUID': instance.userUID,
-      'writtenDate': instance.writtenDate.toIso8601String(),
+      'point': instance.point,
     };
