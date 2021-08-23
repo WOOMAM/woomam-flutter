@@ -26,19 +26,23 @@ class UserRepository {
     final response = await http.post(url,
         headers: generateHeader(),
         body: jsonEncode(applicant.toJson()..remove('point')));
+    final parsedResponse = jsonDecode(utf8.decode(response.bodyBytes));
+    final parsedResult = parsedResponse['result'];
+    final parsedMessage = parsedResponse['message'];
+    // final parsedData = parsedResponse['data']; // no use..
 
     /// check response
-    assert(response.statusCode == 200,
-        'sign-up response was ${response.statusCode}');
+    assert(response.statusCode == 200 && parsedResult == true,
+        'sign-up response was $parsedMessage');
 
     /// when the response's statusCode was `200`
     /// return with its body parsed
-    return User.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+    return applicant;
   }
 
   /// `POST`, [sign-in]
-  /// the successful response returns the class of `User`
-  Future<User> signInUser({required String userUID, phoneNumber}) async {
+  /// the successful response returns the class of `String`
+  Future<String> signInUser({required String userUID, phoneNumber}) async {
     /// make request
     final url = Uri.parse(ep.signIn);
     final requestBody = {"userUID": userUID, "phoneNumber": phoneNumber};
@@ -53,7 +57,10 @@ class UserRepository {
 
     /// when the response's statusCode was `200`
     /// return with its body parsed
-    return User.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+    /// 
+    /// response only has `key` equals to [token]
+    /// and the `value` equals to [{{user Token}}]
+    return jsonDecode(utf8.decode(response.bodyBytes));
   }
 
   /// `DELETE`, [sign-out]
