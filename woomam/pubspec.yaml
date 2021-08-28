@@ -45,8 +45,8 @@ dependencies:
   material_floating_search_bar: ^0.3.4
   adaptive_dialog: ^1.1.0
   flutter_svg: ^0.22.0
+  qr_code_scanner: ^0.5.2
   
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
