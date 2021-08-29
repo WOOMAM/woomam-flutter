@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
 
       /// style
       theme: customThemeData,
-
+      
       /// display
       home: const RootScreen(),
     );

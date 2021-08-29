@@ -19,9 +19,11 @@ class RunningWashingMachineScreen extends StatelessWidget {
         ),
       ),
       body: SafeArea(
-        child: Hero(
-          tag: 'washing-machine-hero-animation',
-          child: Expanded(
+        child: SizedBox(
+          width: width,
+          height: height,
+          child: Hero(
+            tag: 'washing-machine-hero-animation',
             child: Center(
               child: ListView(
                 shrinkWrap: true,
@@ -31,7 +33,7 @@ class RunningWashingMachineScreen extends StatelessWidget {
                     child: Text('Running...',
                         style: titleTextStyle(color: Colors.white)),
                   ),
-                  blankBoxH(30),
+                  blankBoxH(height:30),
 
                   /// flaticon of washing machine is here
                   SvgPicture.asset(
@@ -39,7 +41,7 @@ class RunningWashingMachineScreen extends StatelessWidget {
                     width: width / 2,
                     height: width / 2,
                   ),
-                  blankBoxH(30),
+                  blankBoxH(height:30),
 
                   /// percentage
                   Align(

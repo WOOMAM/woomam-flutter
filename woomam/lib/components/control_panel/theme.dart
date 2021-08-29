@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:woomam/components/components.dart';
 
@@ -13,7 +14,8 @@ ThemeData customThemeData = ThemeData(
   appBarTheme: const AppBarTheme(
     backgroundColor: backgroundColor,
     shadowColor: Colors.transparent,
-    elevation: 0.0
+    elevation: 0.0,
+    systemOverlayStyle: SystemUiOverlayStyle.light,
   ),
 
   textButtonTheme: TextButtonThemeData(
@@ -22,5 +24,4 @@ ThemeData customThemeData = ThemeData(
           MaterialStateColor.resolveWith((states) => Colors.transparent),
     ),
   ),
-  
 );
