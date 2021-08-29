@@ -49,20 +49,24 @@ class WashingMachineLoading extends WashingMachineState {
 ///
 /// `get` method returns [washingMachine]
 class WashingMachineNotVerified extends WashingMachineState {
-  final WashingMachine washingMachine;
-  WashingMachineNotVerified({required this.washingMachine});
+  final List<WashingMachine> washingMachines;
+  final WashingMachine? reservedWashingMachine;
+  WashingMachineNotVerified(
+      {required this.washingMachines, required this.reservedWashingMachine});
 
   @override
-  List<Object> get props => [washingMachine];
+  List<Object> get props => [washingMachines, reservedWashingMachine ?? 'not reserved'];
 }
 
 /// [WashingMachineVerified]: got data and able to occur any event
 ///
 /// `get` method returns [washingMachine]
 class WashingMachineVerified extends WashingMachineState {
-  final WashingMachine washingMachine;
-  WashingMachineVerified({required this.washingMachine});
+  final List<WashingMachine> washingMachines;
+  final WashingMachine reservedWashingMachine;
+  WashingMachineVerified(
+      {required this.washingMachines, required this.reservedWashingMachine});
 
   @override
-  List<Object> get props => [washingMachine];
+  List<Object> get props => [washingMachines, reservedWashingMachine];
 }
