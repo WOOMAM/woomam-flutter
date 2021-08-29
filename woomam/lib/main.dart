@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:woomam/components/components.dart';
+
+/// config
+import 'package:flutter_config/flutter_config.dart';
 
 /// pages
 import 'package:woomam/components/screen/app.dart';
 
 /// component
+import 'package:woomam/components/components.dart';
 
-void main() {
+void main() async {
+  /// requirements for FlutterConfig
+  WidgetsFlutterBinding.ensureInitialized();
+  await FlutterConfig.loadEnvVariables();
+  /// run app
   runApp(const MyApp());
 }
 
