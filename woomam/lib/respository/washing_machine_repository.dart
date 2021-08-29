@@ -45,16 +45,20 @@ class WashingMachineRepository {
         'getAllWashingMachineFromSpecificStore request received msg from server : $parsedMessage');
 
     /// parse the data and return
-    return (parsedResponse['data'] as List<dynamic>)
+    final result = (parsedResponse['data'] as List<dynamic>)
         .map((e) => WashingMachine.fromJson(e))
         .toList();
+    return result;
   }
 
   /// [POST], make reservation
   ///
   /// returns `true` when the request was successful
-  Future<bool> reserveWashingMachine(
-      {required String washingMachineUID, bookedTime, phoneNumber}) async {
+  Future<bool> reserveWashingMachine({
+    required String washingMachineUID,
+    required String bookedTime,
+    required String phoneNumber,
+  }) async {
     /// make `url` and `requestBody`
     final url = Uri.parse(ep.reserve);
     final requestBody = {
