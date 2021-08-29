@@ -69,16 +69,6 @@ class _HomeSearchBarState extends State<HomeSearchBar> {
               showIfClosed: false,
             )
           ],
-          
-          /// leading for back tap
-          leadingActions: [
-            FloatingSearchBarAction.icon(
-              icon: const Icon(FeatherIcons.chevronLeft),
-              onTap: () => _controller.close(),
-              showIfOpened: true,
-              showIfClosed: false,
-            )
-          ],
 
           /// suggestions
           builder: (context, transition) => ClipRRect(
