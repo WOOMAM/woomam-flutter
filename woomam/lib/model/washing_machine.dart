@@ -14,7 +14,7 @@ class WashingMachine {
   final DateTime? bookedTime;
   final QRState qrState;
   final ArduinoState arduinoState;
-  final WashingMachineState washingMachineState;
+  final WashingMachineRunningState? washingMachineState;
 
   WashingMachine(
       {required this.arduinoState,

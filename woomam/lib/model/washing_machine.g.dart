@@ -21,8 +21,8 @@ WashingMachine _$WashingMachineFromJson(Map<String, dynamic> json) =>
           ? null
           : DateTime.parse(json['bookedTime'] as String),
       qrState: _$enumDecode(_$QRStateEnumMap, json['qrState']),
-      washingMachineState: _$enumDecode(
-          _$WashingMachineStateEnumMap, json['washingMachineState']),
+      washingMachineState: _$enumDecodeNullable(
+          _$WashingMachineRunningStateEnumMap, json['washingMachineState']),
       washingMachineUID: json['washingMachineUID'] as String,
     );
 
@@ -37,7 +37,7 @@ Map<String, dynamic> _$WashingMachineToJson(WashingMachine instance) =>
       'qrState': _$QRStateEnumMap[instance.qrState],
       'arduinoState': _$ArduinoStateEnumMap[instance.arduinoState],
       'washingMachineState':
-          _$WashingMachineStateEnumMap[instance.washingMachineState],
+          _$WashingMachineRunningStateEnumMap[instance.washingMachineState],
     };
 
 K _$enumDecode<K, V>(
@@ -72,12 +72,23 @@ const _$ArduinoStateEnumMap = {
 };
 
 const _$QRStateEnumMap = {
-  QRState.unChecked: 'unChecked',
+  QRState.unchecked: 'unchecked',
   QRState.verified: 'verified',
 };
 
-const _$WashingMachineStateEnumMap = {
-  WashingMachineState.turnedOnOpened: 'turnedOnOpened',
-  WashingMachineState.running: 'running',
-  WashingMachineState.turnedOff: 'turnedOff',
+K? _$enumDecodeNullable<K, V>(
+  Map<K, V> enumValues,
+  dynamic source, {
+  K? unknownValue,
+}) {
+  if (source == null) {
+    return null;
+  }
+  return _$enumDecode<K, V>(enumValues, source, unknownValue: unknownValue);
+}
+
+const _$WashingMachineRunningStateEnumMap = {
+  WashingMachineRunningState.turnedOn: 'turnedOn',
+  WashingMachineRunningState.running: 'running',
+  WashingMachineRunningState.turnedOff: 'turnedOff',
 };
