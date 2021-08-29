@@ -43,8 +43,10 @@ class _HomeSearchBarState extends State<HomeSearchBar> {
           scrollPadding: const EdgeInsets.only(top: 16, bottom: 56),
           borderRadius: BorderRadius.circular(20.0),
           openAxisAlignment: 0.0,
+          backdropColor: Colors.transparent,
           iconColor: primaryColor,
-          elevation: 1.0,
+          elevation: 10.0,
+          shadowColor: const Color(0xFFCDCDCD),
 
           /// animations
           transitionDuration: const Duration(milliseconds: 800),

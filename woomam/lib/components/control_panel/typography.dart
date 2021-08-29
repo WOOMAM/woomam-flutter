@@ -5,15 +5,15 @@ import 'package:woomam/components/components.dart';
 
 /// fontSize 32 bold primaryColor
 TextStyle largeTitleTextStyle({Color? color}) => TextStyle(
-    fontSize: 32, fontWeight: FontWeight.bold, color: color ?? textColor);
+    fontSize: 32, fontWeight: FontWeight.w800, color: color ?? textColor);
 
-/// fontSize 20 Semi-bold primaryColor
+/// fontSize 24 Semi-bold primaryColor
 TextStyle titleTextStyle({Color? color}) => TextStyle(
-    fontSize: 20, fontWeight: FontWeight.w600, color: color ?? textColor);
+    fontSize: 24, fontWeight: FontWeight.bold, color: color ?? textColor);
 
 /// fontSize 17 bold primaryColor
 TextStyle headlineTextStyle({Color? color}) => TextStyle(
-    fontSize: 17, fontWeight: FontWeight.bold, color: color ?? textColor);
+    fontSize: 17, fontWeight: FontWeight.w600, color: color ?? textColor);
 
 /// fontSize 17 Medium primaryColor
 TextStyle bodyTextStyle({Color? color}) => TextStyle(

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter/services.dart';
 import '../control_panel/control_panels.dart';
 
 /// pages
 import 'home/home.dart';
-import 'reservation.dart';
+import 'washing_machine/reservation.dart';
 import 'setting.dart';
 
 class RootScreen extends StatefulWidget {
@@ -36,19 +36,29 @@ class _RootScreenState extends State<RootScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      /// use IndexedStack to keep scroll alive between taps
-      body: IndexedStack(
-        index: _currentIndex,
-        children: _bodyChildren,
-      ),
+    /// used `AnnotatedRegion` to handle the status bar style
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      /// status bar mode
+      value: _currentIndex == 1
+          ? SystemUiOverlayStyle.light
+          : SystemUiOverlayStyle.dark,
+      child: Scaffold(
+        /// fills the `status color`
+        backgroundColor: _currentIndex == 1 ? primaryColor : backgroundColor,
+        
 
-      /// bottom navigation bar
-      /// `extendBody`, *If you want to show body behind the navbar, it should be true*
-      extendBody: true,
-      bottomNavigationBar: CustomBottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: _handleIndexChange,
+        /// will be not using Appbar, just using one body
+        /// wrap with `SliderMenuContainer` to use slider_drawer
+        body: IndexedStack(
+          index: _currentIndex,
+          children: _bodyChildren,
+        ),
+
+        /// moved to drawer instead of bottom navigation bar
+        drawer: CustomDrawer(
+          currentIndex: _currentIndex,
+          onIndexChange: _handleIndexChange,
+        ),
       ),
     );
   }

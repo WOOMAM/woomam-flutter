@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 
 import 'control_panels.dart';
 
 /// collection of SizedBox
-SizedBox blankBoxH(double height) => SizedBox(height: height);
+SizedBox blankBoxH({double? height}) => SizedBox(height: height ?? 0.0);
+
+Container blankBoxHWithColor(
+        {required BuildContext context,
+        required double height,
+        required Color? color}) =>
+    Container(
+      width: MediaQuery.of(context).size.width,
+      height: height,
+      color: color ?? grey,
+    );
 
 /// The BottomRightRounded Container widget
 Widget bottomRightRoundedBox(
