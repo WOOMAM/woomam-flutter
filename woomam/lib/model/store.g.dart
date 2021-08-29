@@ -7,8 +7,8 @@ part of 'store.dart';
 // **************************************************************************
 
 Store _$StoreFromJson(Map<String, dynamic> json) => Store(
-      latitude: (json['latitude'] as num).toDouble(),
-      longitude: (json['longitude'] as num).toDouble(),
+      latitude: json['latitude'] as String,
+      longitude: json['longitude'] as String,
       storeName: json['storeName'] as String,
       storeUID: json['storeUID'] as String,
     );

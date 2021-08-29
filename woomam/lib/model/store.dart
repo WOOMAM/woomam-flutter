@@ -6,8 +6,8 @@ part 'store.g.dart';
 class Store {
   final String storeUID;
   final String storeName;
-  final double latitude;
-  final double longitude;
+  final String latitude;
+  final String longitude;
 
   Store(
       {
