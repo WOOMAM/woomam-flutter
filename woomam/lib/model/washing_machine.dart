@@ -27,6 +27,12 @@ class WashingMachine {
       required this.washingMachineState,
       required this.washingMachineUID});
 
+  double getPercentageOfProcess(DateTime currentTime) =>
+      taskFrom != null && taskTo != null
+          ? (taskTo!.toLocal().difference(currentTime).inSeconds /
+              taskTo!.toLocal().difference(taskFrom!.toLocal()).inSeconds)
+          : 0.0;
+
   /// get left time based on [bookedTime]
   ///
   /// returns `Positive` when its reserved
