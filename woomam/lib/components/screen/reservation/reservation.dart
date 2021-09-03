@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 /// bloc
@@ -26,6 +29,10 @@ class _ReservationScreenState extends State<ReservationScreen> {
   late bool isEnabled;
   late String _selectedType;
 
+  /// display timer
+  late Timer _timer;
+  var _time = 0;
+
   @override
   void initState() {
     super.initState();
@@ -38,6 +45,10 @@ class _ReservationScreenState extends State<ReservationScreen> {
     BlocProvider.of<WashingMachineBloc>(context).add(
         GetReservationInformationEvent(
             userPhoneNumber: widget.userPhoneNumber));
+
+    /// tick timer
+    _timer = Timer.periodic(
+        const Duration(seconds: 1), (timer) => setState(() => _time += 1));
   }
 
   /// handle the MultiChoiceChip OnSelected
@@ -78,6 +89,8 @@ class _ReservationScreenState extends State<ReservationScreen> {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
 
+    // log(_timer.tick.toString(), name: 'reservation');
+
     /// how to use `Expanded` inside the `scrollable` widget
     ///
     /// use [LayoutBuilder] with [ConstrainedBox]
@@ -91,7 +104,9 @@ class _ReservationScreenState extends State<ReservationScreen> {
         return errorWidget;
       } else if (state is WashingMachineLoaded) {
         final reservedWashingMachine = state.reservedWashingMachine;
-        if (reservedWashingMachine == null) {
+
+        if (reservedWashingMachine == null ||
+            reservedWashingMachine.isWashingMachineReserved()) {
           return Padding(
             padding: paddingHV(24, 24),
             child: Center(
@@ -112,12 +127,14 @@ class _ReservationScreenState extends State<ReservationScreen> {
               ),
             ),
           );
-        } else {
+        }
+
+        /// the user has reserved washing machine
+        else {
           /// calculate time in minutes
-          final leftTime = reservedWashingMachine.bookedTime != null
-              ? reservedWashingMachine.bookedTime!.difference(
-                  DateTime.now()) // DateTime.now() is before bookTime
-              : const Duration(minutes: 0);
+          var tickedLeftTimeInSeconds = 5 * 60 - reservedWashingMachine.getPastTimeInSeconds();
+          var leftMinutes = tickedLeftTimeInSeconds ~/ 60;
+          var leftSeconds = tickedLeftTimeInSeconds - (leftMinutes * 60);
 
           /// build here
           /// check the reserveration
@@ -264,14 +281,16 @@ class _ReservationScreenState extends State<ReservationScreen> {
                                 style: headlineTextStyle(),
                               ),
                               subtitle: Text(
-                                '${leftTime.inMinutes}분 ${leftTime.inSeconds}초 남음',
+                                tickedLeftTimeInSeconds > 0
+                                    ? '$leftMinutes분 $leftSeconds초 남음'
+                                    : '시간이 만료되었어요 🥺',
                                 style: callOutTextStyle(),
                               ),
                               trailing: TextButton(
                                 onPressed: () => Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (_) => const QRcodeScreen())),
+                                        builder: (_) => const QRCodeScreen())),
                                 child: Text(
                                   'QR\nCODE',
                                   style: bodyTextStyle(color: Colors.white),

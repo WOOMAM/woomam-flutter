@@ -7,14 +7,14 @@ import 'dart:io' show Platform;
 
 import '../../control_panel/control_panels.dart';
 
-class QRcodeScreen extends StatefulWidget {
-  const QRcodeScreen({Key? key}) : super(key: key);
+class QRCodeScreen extends StatefulWidget {
+  const QRCodeScreen({Key? key}) : super(key: key);
 
   @override
-  _QRcodeScreenState createState() => _QRcodeScreenState();
+  _QRCodeScreenState createState() => _QRCodeScreenState();
 }
 
-class _QRcodeScreenState extends State<QRcodeScreen> {
+class _QRCodeScreenState extends State<QRCodeScreen> {
   /// variables
   Barcode? scannedResult;
   QRViewController? controller;
@@ -60,11 +60,16 @@ class _QRcodeScreenState extends State<QRcodeScreen> {
       setState(() {
         scannedResult = scanData;
       });
+      if (scannedResult != null) {
+        
+        Navigator.pop(context);
+      }
     });
   }
 
   void _onPermissionSet(BuildContext context, QRViewController ctrl, bool p) {
-    log('${DateTime.now().toIso8601String()}_onPermissionSet $p', name: 'QRCODE');
+    log('${DateTime.now().toIso8601String()}_onPermissionSet $p',
+        name: 'QRCODE');
     if (!p) showCustomSnackbar(context: context, msg: 'no permission');
   }
 
@@ -82,10 +87,12 @@ class _QRcodeScreenState extends State<QRcodeScreen> {
         title: const Text('QR CODE'),
         backgroundColor: primaryColor,
         actions: [
-          IconButton(onPressed: () async {
-                              await controller?.flipCamera();
-                              setState(() {});
-                            }, icon: const Icon(FeatherIcons.shuffle))
+          IconButton(
+              onPressed: () async {
+                await controller?.flipCamera();
+                setState(() {});
+              },
+              icon: const Icon(FeatherIcons.shuffle))
         ],
       ),
       body: Column(
@@ -100,10 +107,12 @@ class _QRcodeScreenState extends State<QRcodeScreen> {
                 children: <Widget>[
                   if (scannedResult != null)
                     Text(
-                        scannedResult!.code, style: headlineTextStyle(color: Colors.white),maxLines: null,)
+                      scannedResult!.code,
+                      style: headlineTextStyle(color: Colors.white),
+                      maxLines: null,
+                    )
                   else
                     const Text('Scan a code'),
-                  
                 ],
               ),
             ),
