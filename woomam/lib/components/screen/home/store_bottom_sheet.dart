@@ -85,16 +85,8 @@ class _ReservationBottomSheetState extends State<ReservationBottomSheet> {
                     ? ListView.separated(
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
-                          final isReserved = washingMachines[index]
-                                      .bookedTime !=
-                                  null
-                              ? washingMachines[index]
-                                          .bookedTime!
-                                          .difference(DateTime.now()) >
-                                      const Duration(minutes: 5)
-                                  ? false // DateTime.now() has passed over 5 minutes
-                                  : true // DateTime.now() is before bookTime
-                              : false; // bookedTime is null
+                          final isReserved =
+                              washingMachines[index].isWashingMachineReserved();
 
                           return ListTile(
                             title: Text(
