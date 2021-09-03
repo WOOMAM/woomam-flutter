@@ -168,7 +168,7 @@ class WashingMachineRepository {
     return parsedResult;
   }
 
-  Future<WashingMachine> getReservationInformation(
+  Future<dynamic> getReservationInformation(
       {required String phoneNumber}) async {
     /// make request
     final url = Uri.parse(ep.reservedWashingMachine);
@@ -177,14 +177,17 @@ class WashingMachineRepository {
     /// wait for response
     final response = await http.post(url,
         headers: generateHeader(token: token), body: jsonEncode(requetsBody));
-    final parsedResult = jsonDecode(utf8.decode(response.bodyBytes));
-    final parsedMsg = parsedResult['message'];
-    final parsedData = parsedResult['data'];
 
     /// check the response
-    assert(response.statusCode == 200,
-        'the request was getReservationInformation client and the message from server was $parsedMsg');
-
-    return WashingMachine.fromJson(parsedData);
+    if (response.statusCode == 200) {
+      final parsedResult = jsonDecode(utf8.decode(response.bodyBytes));
+      final parsedMsg = parsedResult['message'];
+      final parsedData = parsedResult['data'];
+      return WashingMachine.fromJson(parsedData);
+    } else if (response.statusCode == 204) {
+      return null;
+    } else {
+      return 'the request was getReservationInformation client and the statusCode from server was ${response.statusCode}';
+    }
   }
 }

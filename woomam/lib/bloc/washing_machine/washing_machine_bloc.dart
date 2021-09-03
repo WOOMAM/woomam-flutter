@@ -32,7 +32,7 @@ class WashingMachineBloc
   }
 
   /// GetStatsOfWashingMachineEvent
-  /// 
+  ///
   /// all users can get data of the washing machines
   /// only when they don't have reservation
   Stream<WashingMachineState> _mapGetStatsOfWashingMachineEventToState(
@@ -46,8 +46,7 @@ class WashingMachineBloc
         yield WashingMachineLoaded(
             washingMachines: response,
             reservedWashingMachine: prevState.reservedWashingMachine);
-      }
-      else {
+      } else {
         yield WashingMachineLoading();
         final response = await washingMachineRepository
             .getAllWashingMachinesFromSpecificStore(storeUID: event.storeUID);
@@ -110,12 +109,16 @@ class WashingMachineBloc
       yield WashingMachineLoading();
       final response = await washingMachineRepository.getReservationInformation(
           phoneNumber: event.userPhoneNumber);
-      assert(response.runtimeType == WashingMachine,
-          'the response is not appropriate');
 
-      /// the user don't need to display data of washing machines in reservation screen
-      yield WashingMachineLoaded(
-          washingMachines: const [], reservedWashingMachine: response);
+      /// if the reservations exist
+      if (response.runtimeType == WashingMachine) {
+        /// the user don't need to display data of washing machines in reservation screen
+        yield WashingMachineLoaded(
+            washingMachines: const [], reservedWashingMachine: response);
+      } else if (response == null) {
+        yield WashingMachineLoaded(
+            washingMachines: const [], reservedWashingMachine: null);
+      }
     } catch (e) {
       yield WashingMachineError(msg: e.toString());
     }
