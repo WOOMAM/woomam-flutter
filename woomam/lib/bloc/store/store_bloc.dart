@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:woomam/model/model.dart';
 
 import 'package:woomam/respository/store_repository.dart';
 

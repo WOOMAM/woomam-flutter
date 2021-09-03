@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:woomam/model/enum.dart';
 import 'package:woomam/model/washing_machine.dart';
 
 ///

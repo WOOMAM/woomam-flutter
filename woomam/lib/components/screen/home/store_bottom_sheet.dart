@@ -70,7 +70,7 @@ class _ReservationBottomSheetState extends State<ReservationBottomSheet> {
         log(reservedWashingMachine
             ?.getLeftDuration(DateTime.now())
             .toString() ?? 'none', name: 'StoreBottomSheet');
-        if (reservedWashingMachine == null || true) {
+        if (reservedWashingMachine == null) {
           return Container(
             height: height,
             padding: paddingHV(16, 24),

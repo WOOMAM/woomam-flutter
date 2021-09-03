@@ -58,12 +58,12 @@ class ConfirmUserToWashingMachineEvent extends WashingMachineEvent {
 ///
 /// `get` method returns [washingMachineUID]
 class RunWashingMachineEvent extends WashingMachineEvent {
-  final String washingMachineUID;
+  final WashingMachine washingMachine;
 
-  RunWashingMachineEvent({required this.washingMachineUID});
+  RunWashingMachineEvent({required this.washingMachine});
 
   @override
-  List<Object> get props => [washingMachineUID];
+  List<Object> get props => [washingMachine];
 }
 
 class GetReservationInformationEvent extends WashingMachineEvent {
@@ -72,4 +72,12 @@ class GetReservationInformationEvent extends WashingMachineEvent {
 
   @override
   List<Object> get props => [userPhoneNumber];
+}
+
+class InitWashingMachineEvent extends WashingMachineEvent {
+  final WashingMachine washingMachine;
+  InitWashingMachineEvent({required this.washingMachine});
+
+  @override
+  List<Object> get props => [washingMachine];
 }
