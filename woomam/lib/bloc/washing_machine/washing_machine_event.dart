@@ -33,7 +33,8 @@ class ReserveWashingMachineEvent extends WashingMachineEvent {
   final String currentUserPhoneNumber;
 
   ReserveWashingMachineEvent(
-      {required this.currentUserPhoneNumber, required this.reservedWashingMachine});
+      {required this.currentUserPhoneNumber,
+      required this.reservedWashingMachine});
 
   @override
   List<Object> get props => [reservedWashingMachine, currentUserPhoneNumber];
@@ -63,4 +64,12 @@ class RunWashingMachineEvent extends WashingMachineEvent {
 
   @override
   List<Object> get props => [washingMachineUID];
+}
+
+class GetReservationInformationEvent extends WashingMachineEvent {
+  final String userPhoneNumber;
+  GetReservationInformationEvent({required this.userPhoneNumber});
+
+  @override
+  List<Object> get props => [userPhoneNumber];
 }
