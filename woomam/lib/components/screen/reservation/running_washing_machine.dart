@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:woomam/components/components.dart';
+import 'package:woomam/model/washing_machine.dart';
 
 class RunningWashingMachineScreen extends StatelessWidget {
-  const RunningWashingMachineScreen({Key? key}) : super(key: key);
+  final WashingMachine washingMachine;
+  const RunningWashingMachineScreen({Key? key, required this.washingMachine}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +25,7 @@ class RunningWashingMachineScreen extends StatelessWidget {
           width: width,
           height: height,
           child: Hero(
-            tag: 'washing-machine-hero-animation',
+            tag: washingMachine.washingMachineUID,
             child: Center(
               child: ListView(
                 shrinkWrap: true,

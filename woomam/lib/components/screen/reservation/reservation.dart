@@ -9,6 +9,7 @@ import 'package:woomam/bloc/bloc.dart';
 
 /// components
 import 'package:flutter_svg/svg.dart';
+import 'package:woomam/model/model.dart';
 import './qr_code.dart';
 import './running_washing_machine.dart';
 import '../../components.dart';
@@ -46,9 +47,19 @@ class _ReservationScreenState extends State<ReservationScreen> {
         GetReservationInformationEvent(
             userPhoneNumber: widget.userPhoneNumber));
 
-    /// tick timer
-    _timer = Timer.periodic(
-        const Duration(seconds: 1), (timer) => setState(() => _time += 1));
+    /// get state
+    final washingMachineState =
+        BlocProvider.of<WashingMachineBloc>(context).state;
+    if (washingMachineState is WashingMachineLoaded) {
+      if (washingMachineState.reservedWashingMachine!.qrState ==
+          QRState.verified) {
+        _timer.cancel();
+      }
+    } else {
+      /// tick timer
+      _timer = Timer.periodic(
+          const Duration(seconds: 1), (timer) => setState(() => _time += 1));
+    }
   }
 
   /// handle the MultiChoiceChip OnSelected
@@ -57,7 +68,7 @@ class _ReservationScreenState extends State<ReservationScreen> {
       });
 
   /// handle the Running OnPressed
-  void _handleRunningButtonOnPressed() {
+  void _handleRunningButtonOnPressed(WashingMachine reservedWashingMachine) {
     setState(() => isEnabled = !isEnabled);
 
     /// navigate
@@ -66,7 +77,9 @@ class _ReservationScreenState extends State<ReservationScreen> {
 
       /// using [PageRouteBuilder] removes the basic navigation animation
       PageRouteBuilder(
-        pageBuilder: (_, __, ___) => const RunningWashingMachineScreen(),
+        pageBuilder: (_, __, ___) => RunningWashingMachineScreen(
+          washingMachine: reservedWashingMachine,
+        ),
 
         /// the [transitionDuration] only handles
         /// the timeLength between `currentPage` to `nextPage`
@@ -106,37 +119,20 @@ class _ReservationScreenState extends State<ReservationScreen> {
       } else if (state is WashingMachineLoaded) {
         final reservedWashingMachine = state.reservedWashingMachine;
 
-        if (reservedWashingMachine == null ||
-            !reservedWashingMachine.isWashingMachineReserved(DateTime.now())) {
-          return Padding(
-            padding: paddingHV(24, 24),
-            child: Center(
-              child: RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(children: [
-                  TextSpan(
-                      text: '예약하신 내역이 없어요 😭\n\n\n',
-                      style: bodyTextStyle(color: shallowPrimaryColor)),
-                  TextSpan(
-                      text: '<예약하는 방법>\n\n',
-                      style: headlineTextStyle(color: Colors.white)),
-                  TextSpan(
-                      text:
-                          "'왼쪽에서 오른쪽 쓸기'\n>\n'지도 탭으로 가기'\n>\n'세탁기 아이콘 터치'\n>\n'세탁기 오른쪽 신청버튼 터치'",
-                      style: callOutTextStyle(color: shallowPrimaryColor)),
-                ]),
-              ),
-            ),
-          );
-        }
-
         /// the user has reserved washing machine
-        else {
+        if (reservedWashingMachine != null) {
           /// calculate time in minutes
-          var tickedLeftTimeInSeconds = reservedWashingMachine.getLeftDuration(DateTime.now()).abs().inSeconds;
+          var tickedLeftTimeInSeconds = reservedWashingMachine
+              .getLeftDuration(DateTime.now())
+              .abs()
+              .inSeconds;
           log('${reservedWashingMachine.bookedTime!.toLocal().toString()} vs. ${DateTime.now()}',
               name: 'LEFT TIME');
-          log(reservedWashingMachine.getLeftDuration(DateTime.now()).abs().toString(),
+          log(
+              reservedWashingMachine
+                  .getLeftDuration(DateTime.now())
+                  .abs()
+                  .toString(),
               name: 'LEFT TIME');
           var leftMinutes = tickedLeftTimeInSeconds ~/ 60;
           var leftSeconds = tickedLeftTimeInSeconds - (leftMinutes * 60);
@@ -175,9 +171,8 @@ class _ReservationScreenState extends State<ReservationScreen> {
                             style: largeTitleTextStyle(color: Colors.white),
                           ),
                           blankBoxH(height: 30),
-                          // TODO change tag with uid
                           Hero(
-                            tag: 'washing-machine-hero-animation',
+                            tag: reservedWashingMachine.washingMachineUID,
 
                             /// added [DefaultTextStyle] to `nextPage`
                             /// so that no `red-underline` will not displayed
@@ -258,9 +253,12 @@ class _ReservationScreenState extends State<ReservationScreen> {
                                 style: headlineTextStyle(),
                               ),
                               subtitle: Text(
-                                tickedLeftTimeInSeconds > 0
-                                    ? '$leftMinutes분 $leftSeconds초 남음'
-                                    : '시간이 만료되었어요 🥺',
+                                reservedWashingMachine.qrState ==
+                                        QRState.verified
+                                    ? '본인인증 성공!'
+                                    : tickedLeftTimeInSeconds > 0
+                                        ? '$leftMinutes분 $leftSeconds초 남음'
+                                        : '시간이 만료되었어요 🥺',
                                 style: callOutTextStyle(),
                               ),
                               trailing: TextButton(
@@ -268,8 +266,13 @@ class _ReservationScreenState extends State<ReservationScreen> {
                                     ? Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (_) =>
-                                                const QRCodeScreen()))
+                                            builder: (_) => QRCodeScreen(
+                                                  washingMachineUID:
+                                                      reservedWashingMachine
+                                                          .washingMachineUID,
+                                                  phoneNumber:
+                                                      widget.userPhoneNumber,
+                                                )))
                                     : showCustomSnackbar(
                                         context: context, msg: '다시 예약해주세요 🥺'),
                                 child: Text(
@@ -328,7 +331,8 @@ class _ReservationScreenState extends State<ReservationScreen> {
                                 style: callOutTextStyle(),
                               ),
                               trailing: TextButton(
-                                onPressed: _handleRunningButtonOnPressed,
+                                onPressed: () =>
+                                    _handleRunningButtonOnPressed(reservedWashingMachine),
                                 child: Text(
                                   '시작',
                                   style: bodyTextStyle(color: Colors.white),
@@ -353,6 +357,27 @@ class _ReservationScreenState extends State<ReservationScreen> {
               ),
             );
           });
+        } else {
+          return Padding(
+            padding: paddingHV(24, 24),
+            child: Center(
+              child: RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(children: [
+                  TextSpan(
+                      text: '예약하신 내역이 없어요 😭\n\n\n',
+                      style: bodyTextStyle(color: shallowPrimaryColor)),
+                  TextSpan(
+                      text: '<예약하는 방법>\n\n',
+                      style: headlineTextStyle(color: Colors.white)),
+                  TextSpan(
+                      text:
+                          "'왼쪽에서 오른쪽 쓸기'\n>\n'지도 탭으로 가기'\n>\n'세탁기 아이콘 터치'\n>\n'세탁기 오른쪽 신청버튼 터치'",
+                      style: callOutTextStyle(color: shallowPrimaryColor)),
+                ]),
+              ),
+            ),
+          );
         }
       }
 
