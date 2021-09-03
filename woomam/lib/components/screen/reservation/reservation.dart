@@ -15,6 +15,7 @@ import './running_washing_machine.dart';
 import '../../components.dart';
 
 final List<String> laundryType = ['표준', '소량/쾌속', '타월', '이불세탁', '삶음', '무세제통세척'];
+final List<int> laundryTimeInMinute = [100, 35, 60, 80, 120, 45];
 
 class ReservationScreen extends StatefulWidget {
   final String userPhoneNumber;
@@ -246,12 +247,17 @@ class _ReservationScreenState extends State<ReservationScreen> {
                                 style: headlineTextStyle(),
                               ),
                               subtitle: Text(
-                                reservedWashingMachine.qrState ==
-                                        QRState.verified
-                                    ? '본인인증 성공!'
-                                    : tickedLeftTimeInSeconds > 0
-                                        ? '$leftMinutes분 $leftSeconds초 남음'
-                                        : '시간이 만료되었어요 🥺',
+                                reservedWashingMachine
+                                        .isReadyForInitWashingMachine()
+                                    ? '빨래가 완료됐어요! 본인인증 후 찾아가세요 🤩'
+                                    : reservedWashingMachine
+                                            .isReadyForRunningWashingMachine()
+                                        ? '본인인증 성공! 빨래 종류를 선택하고 돌려보세요'
+                                        : reservedWashingMachine
+                                                .isWaitingForUserVerification(
+                                                    DateTime.now())
+                                            ? '$leftMinutes분 $leftSeconds초 남음'
+                                            : '시간이 만료되었어요 🥺',
                                 style: callOutTextStyle(),
                               ),
                               trailing: TextButton(
@@ -318,9 +324,9 @@ class _ReservationScreenState extends State<ReservationScreen> {
                                 style: headlineTextStyle(),
                               ),
                               subtitle: Text(
-                                isEnabled
-                                    ? '남은 시간: ${12}시간'
-                                    : '빨래를 넣고 돌려보세요 🤩',
+                                _selectedType != ''
+                                    ? '선택하신 $_selectedType은 ${laundryTimeInMinute[laundryType.indexOf(_selectedType)]}분이 걸려요'
+                                    : '빨래를 선택해 보세요 🤩',
                                 style: callOutTextStyle(),
                               ),
                               trailing: TextButton(
@@ -337,7 +343,7 @@ class _ReservationScreenState extends State<ReservationScreen> {
                                     borderRadius: BorderRadius.circular(20),
                                   ),
                                   padding: paddingHV(16, 8),
-                                  backgroundColor: primaryColor,
+                                  backgroundColor: emphasizeColor,
                                 ),
                               ),
                             ),

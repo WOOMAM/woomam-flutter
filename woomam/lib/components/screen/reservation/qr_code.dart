@@ -75,8 +75,10 @@ class _QRCodeScreenState extends State<QRCodeScreen> {
             ConfirmUserToWashingMachineEvent(
                 currentUserPhoneNumber: widget.phoneNumber,
                 washingMachineUID: widget.washingMachineUID));
-        Navigator.pop(context, (res) => showCustomSnackbar(context: context, msg: 'QR 인증이 완료되었습니다'));
-
+        Navigator.pop(
+            context,
+            (res) =>
+                showCustomSnackbar(context: context, msg: 'QR 인증이 완료되었습니다'));
       }
     });
   }
@@ -126,7 +128,10 @@ class _QRCodeScreenState extends State<QRCodeScreen> {
                       maxLines: null,
                     )
                   else
-                    const Text('Scan a code'),
+                    Text(
+                      '세탁기 옆 QR 코드를 스캔해보세요',
+                      style: headlineTextStyle(color: Colors.white),
+                    ),
                 ],
               ),
             ),
