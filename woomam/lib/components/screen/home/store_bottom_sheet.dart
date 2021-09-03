@@ -67,8 +67,10 @@ class _ReservationBottomSheetState extends State<ReservationBottomSheet> {
       } else if (state is WashingMachineLoaded) {
         final washingMachines = state.washingMachines;
         final reservedWashingMachine = state.reservedWashingMachine;
-
-        if (reservedWashingMachine == null) {
+        log(reservedWashingMachine
+            ?.getLeftDuration(DateTime.now())
+            .toString() ?? 'none', name: 'StoreBottomSheet');
+        if (reservedWashingMachine == null || true) {
           return Container(
             height: height,
             padding: paddingHV(16, 24),
@@ -85,8 +87,9 @@ class _ReservationBottomSheetState extends State<ReservationBottomSheet> {
                     ? ListView.separated(
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
-                          final isReserved =
-                              washingMachines[index].isWashingMachineReserved();
+                          final isReserved = washingMachines[index]
+                              .isWashingMachineReserved(
+                                  DateTime.now());
 
                           return ListTile(
                             title: Text(

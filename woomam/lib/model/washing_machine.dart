@@ -29,20 +29,22 @@ class WashingMachine {
       required this.washingMachineState,
       required this.washingMachineUID});
 
-  /// get left time based on current time
-  /// if the `bookedTime` occurs after this(DateTime.now()) returns `Negative`
-  /// so Negative means already booked
-  int getPastTimeInSeconds() =>
-      DateTime.now().difference(bookedTime!).inSeconds;
+  /// get left time based on [bookedTime]
+  ///
+  /// returns `Positive` when its reserved
+  /// or else returns `Negative` when its expired
+  /// 
+  /// if the [bookedTime] is null, it returns `Duration 0`
+  Duration getLeftDuration(DateTime currentTime) => currentTime.toLocal().difference(bookedTime ?? currentTime);
 
   /// check the washing machine has reserved already
   /// based on current time
-  bool isWashingMachineReserved() {
+  bool isWashingMachineReserved(DateTime currentTime) {
     if (bookedTime != null) {
-      final isInFiveMinutes = getPastTimeInSeconds() < 0;
+      final isInFiveMinutes = getLeftDuration(currentTime).isNegative;
       return isInFiveMinutes;
     }
-    return true;
+    return false;
   }
 
   /// hanlde `JSON`

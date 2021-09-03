@@ -69,7 +69,7 @@ class WashingMachineBloc
         final response = await washingMachineRepository.reserveWashingMachine(
           washingMachineUID: event.reservedWashingMachine.washingMachineUID,
           bookedTime:
-              DateTime.now().add(const Duration(minutes: 5)).toIso8601String(),
+              DateTime.now().toLocal().add(const Duration(minutes: 5)).toIso8601String(),
           phoneNumber: event.currentUserPhoneNumber,
         );
         assert(response, 'the reservation failed');

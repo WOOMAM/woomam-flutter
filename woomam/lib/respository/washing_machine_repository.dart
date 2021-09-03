@@ -181,9 +181,8 @@ class WashingMachineRepository {
     /// check the response
     if (response.statusCode == 200) {
       final parsedResult = jsonDecode(utf8.decode(response.bodyBytes));
-      final parsedMsg = parsedResult['message'];
-      final parsedData = parsedResult['data'];
-      return WashingMachine.fromJson(parsedData);
+      final parsedData = (parsedResult['data'] as List<dynamic>);
+      return parsedData.map((e) => WashingMachine.fromJson(e)).toList()[0];
     } else if (response.statusCode == 204) {
       return null;
     } else {

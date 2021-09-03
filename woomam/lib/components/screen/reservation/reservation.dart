@@ -101,12 +101,13 @@ class _ReservationScreenState extends State<ReservationScreen> {
       } else if (state is WashingMachineLoading) {
         return loadingWidget;
       } else if (state is WashingMachineError) {
+        log('error \n' + state.msg, name: 'Reservation');
         return errorWidget;
       } else if (state is WashingMachineLoaded) {
         final reservedWashingMachine = state.reservedWashingMachine;
 
         if (reservedWashingMachine == null ||
-            reservedWashingMachine.isWashingMachineReserved()) {
+            !reservedWashingMachine.isWashingMachineReserved(DateTime.now())) {
           return Padding(
             padding: paddingHV(24, 24),
             child: Center(
@@ -132,7 +133,11 @@ class _ReservationScreenState extends State<ReservationScreen> {
         /// the user has reserved washing machine
         else {
           /// calculate time in minutes
-          var tickedLeftTimeInSeconds = 5 * 60 - reservedWashingMachine.getPastTimeInSeconds();
+          var tickedLeftTimeInSeconds = reservedWashingMachine.getLeftDuration(DateTime.now()).abs().inSeconds;
+          log('${reservedWashingMachine.bookedTime!.toLocal().toString()} vs. ${DateTime.now()}',
+              name: 'LEFT TIME');
+          log(reservedWashingMachine.getLeftDuration(DateTime.now()).abs().toString(),
+              name: 'LEFT TIME');
           var leftMinutes = tickedLeftTimeInSeconds ~/ 60;
           var leftSeconds = tickedLeftTimeInSeconds - (leftMinutes * 60);
 
@@ -249,6 +254,42 @@ class _ReservationScreenState extends State<ReservationScreen> {
                             ListTile(
                               /// the category name
                               title: Text(
+                                '본인인증',
+                                style: headlineTextStyle(),
+                              ),
+                              subtitle: Text(
+                                tickedLeftTimeInSeconds > 0
+                                    ? '$leftMinutes분 $leftSeconds초 남음'
+                                    : '시간이 만료되었어요 🥺',
+                                style: callOutTextStyle(),
+                              ),
+                              trailing: TextButton(
+                                onPressed: () => tickedLeftTimeInSeconds > 0
+                                    ? Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (_) =>
+                                                const QRCodeScreen()))
+                                    : showCustomSnackbar(
+                                        context: context, msg: '다시 예약해주세요 🥺'),
+                                child: Text(
+                                  'QR\nCODE',
+                                  style: bodyTextStyle(color: Colors.white),
+                                  textAlign: TextAlign.center,
+                                ),
+                                style: TextButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  padding: paddingHV(16, 8),
+                                  backgroundColor: primaryColor,
+                                ),
+                              ),
+                            ),
+                            blankBoxH(height: 20),
+                            ListTile(
+                              /// the category name
+                              title: Text(
                                 '세탁 유형 선택',
                                 style: headlineTextStyle(),
                               ),
@@ -274,37 +315,6 @@ class _ReservationScreenState extends State<ReservationScreen> {
                               ),
                             ),
                             blankBoxH(height: 10),
-                            ListTile(
-                              /// the category name
-                              title: Text(
-                                '본인인증',
-                                style: headlineTextStyle(),
-                              ),
-                              subtitle: Text(
-                                tickedLeftTimeInSeconds > 0
-                                    ? '$leftMinutes분 $leftSeconds초 남음'
-                                    : '시간이 만료되었어요 🥺',
-                                style: callOutTextStyle(),
-                              ),
-                              trailing: TextButton(
-                                onPressed: () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (_) => const QRCodeScreen())),
-                                child: Text(
-                                  'QR\nCODE',
-                                  style: bodyTextStyle(color: Colors.white),
-                                  textAlign: TextAlign.center,
-                                ),
-                                style: TextButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  padding: paddingHV(16, 8),
-                                  backgroundColor: primaryColor,
-                                ),
-                              ),
-                            ),
                             ListTile(
                               /// the category name
                               title: Text(
