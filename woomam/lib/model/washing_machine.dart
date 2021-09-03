@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import './enum.dart';
 
 import 'package:json_annotation/json_annotation.dart';
@@ -26,6 +28,20 @@ class WashingMachine {
       required this.qrState,
       required this.washingMachineState,
       required this.washingMachineUID});
+
+  /// get left time based on current time
+  int getPastTimeInMinutes() =>
+      DateTime.now().difference(bookedTime!).inMinutes;
+
+  /// check the washing machine has reserved already
+  /// based on current time
+  bool isWashingMachineReserved() {
+    if (bookedTime != null) {
+      final isInFiveMinutes = getPastTimeInMinutes() < 0;
+      return isInFiveMinutes;
+    }
+    return true;
+  }
 
   /// hanlde `JSON`
   factory WashingMachine.fromJson(Map<String, dynamic> json) =>
