@@ -130,11 +130,10 @@ class WashingMachineBloc
         );
         if (response) {
           final updatedWashingMachine = WashingMachine(
-            arduinoState: prevState.reservedWashingMachine!.arduinoState,
-            storeUID: prevState.reservedWashingMachine!.storeUID,
+            arduinoState: ArduinoState.opened,
             qrState: QRState.verified,
-            washingMachineState:
-                prevState.reservedWashingMachine!.washingMachineState,
+            washingMachineState: WashingMachineRunningState.turnedOn,
+            storeUID: prevState.reservedWashingMachine!.storeUID,
             washingMachineUID:
                 prevState.reservedWashingMachine!.washingMachineUID,
           );
@@ -160,10 +159,11 @@ class WashingMachineBloc
         assert(response, 'running washing machine failed');
         final updatedWashingMachine = WashingMachine(
           arduinoState: ArduinoState.closed,
-          storeUID: prevState.reservedWashingMachine!.storeUID,
           qrState: QRState.verified,
           washingMachineState: WashingMachineRunningState.running,
-          washingMachineUID: prevState.reservedWashingMachine!.washingMachineUID,
+          storeUID: prevState.reservedWashingMachine!.storeUID,
+          washingMachineUID:
+              prevState.reservedWashingMachine!.washingMachineUID,
         );
         yield WashingMachineLoaded(
             washingMachines: prevState.washingMachines,

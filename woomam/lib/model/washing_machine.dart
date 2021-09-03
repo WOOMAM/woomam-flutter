@@ -47,6 +47,12 @@ class WashingMachine {
   }
 
   /// check process status
+  bool isWaitingForUserVerification(DateTime currentTime) =>
+      isWashingMachineReserved(currentTime) &&
+      qrState == QRState.unchecked &&
+      washingMachineState == WashingMachineRunningState.turnedOff &&
+      arduinoState == ArduinoState.opened;
+
   bool isReadyForRunningWashingMachine() =>
       qrState == QRState.verified &&
       washingMachineState == WashingMachineRunningState.turnedOn &&
