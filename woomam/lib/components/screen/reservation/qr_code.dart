@@ -1,14 +1,20 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:woomam/bloc/bloc.dart';
 import 'dart:io' show Platform;
 
 import '../../control_panel/control_panels.dart';
 
 class QRCodeScreen extends StatefulWidget {
-  const QRCodeScreen({Key? key}) : super(key: key);
+  final String phoneNumber;
+  final String washingMachineUID;
+  const QRCodeScreen(
+      {Key? key, required this.phoneNumber, required this.washingMachineUID})
+      : super(key: key);
 
   @override
   _QRCodeScreenState createState() => _QRCodeScreenState();
@@ -61,8 +67,16 @@ class _QRCodeScreenState extends State<QRCodeScreen> {
         scannedResult = scanData;
       });
       if (scannedResult != null) {
-        
-        Navigator.pop(context);
+        /// dispose controller - QR
+        this.controller!.dispose();
+
+        /// add event for QR check
+        BlocProvider.of<WashingMachineBloc>(context).add(
+            ConfirmUserToWashingMachineEvent(
+                currentUserPhoneNumber: widget.phoneNumber,
+                washingMachineUID: widget.washingMachineUID));
+        Navigator.pop(context, (res) => showCustomSnackbar(context: context, msg: 'QR 인증이 완료되었습니다'));
+
       }
     });
   }

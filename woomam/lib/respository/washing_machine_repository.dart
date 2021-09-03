@@ -87,8 +87,10 @@ class WashingMachineRepository {
   /// [POST], verify user's information
   ///
   /// returns `true` when the request was successful
-  Future<bool> verifyUserWithQRCodeOfWashingMachine(
-      {required String washingMachineUID, phoneNumber}) async {
+  Future<bool> verifyUserWithQRCodeOfWashingMachine({
+    required String washingMachineUID,
+    required String phoneNumber,
+  }) async {
     /// make `url` and `requestBody`
     final url = Uri.parse(ep.qrCheck);
     final requestBody = {

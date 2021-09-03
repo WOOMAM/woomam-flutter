@@ -69,40 +69,43 @@ class _ReservationScreenState extends State<ReservationScreen> {
 
   /// handle the Running OnPressed
   void _handleRunningButtonOnPressed(WashingMachine reservedWashingMachine) {
-    setState(() => isEnabled = !isEnabled);
+    /// before emiting event please check `QRstate`
+    if (reservedWashingMachine.qrState == QRState.verified) {
+      setState(() => isEnabled = !isEnabled);
 
-    /// navigate
-    Navigator.push(
-      context,
+      /// navigate
+      Navigator.push(
+        context,
 
-      /// using [PageRouteBuilder] removes the basic navigation animation
-      PageRouteBuilder(
-        pageBuilder: (_, __, ___) => RunningWashingMachineScreen(
-          washingMachine: reservedWashingMachine,
-        ),
-
-        /// the [transitionDuration] only handles
-        /// the timeLength between `currentPage` to `nextPage`
-        transitionDuration: const Duration(milliseconds: 800),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-            Align(
-          child: FadeTransition(
-            opacity: animation,
-            child: child,
+        /// using [PageRouteBuilder] removes the basic navigation animation
+        PageRouteBuilder(
+          pageBuilder: (_, __, ___) => RunningWashingMachineScreen(
+            washingMachine: reservedWashingMachine,
           ),
+
+          /// the [transitionDuration] only handles
+          /// the timeLength between `currentPage` to `nextPage`
+          transitionDuration: const Duration(milliseconds: 800),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+              Align(
+            child: FadeTransition(
+              opacity: animation,
+              child: child,
+            ),
+          ),
+          reverseTransitionDuration: const Duration(milliseconds: 800),
+          fullscreenDialog: true,
         ),
-        reverseTransitionDuration: const Duration(milliseconds: 800),
-        fullscreenDialog: true,
-      ),
-    );
+      );
+    } else {
+      showCustomSnackbar(context: context, msg: '본인인증을 해주세요');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-
-    // log(_timer.tick.toString(), name: 'reservation');
 
     /// how to use `Expanded` inside the `scrollable` widget
     ///
@@ -126,20 +129,10 @@ class _ReservationScreenState extends State<ReservationScreen> {
               .getLeftDuration(DateTime.now())
               .abs()
               .inSeconds;
-          log('${reservedWashingMachine.bookedTime!.toLocal().toString()} vs. ${DateTime.now()}',
-              name: 'LEFT TIME');
-          log(
-              reservedWashingMachine
-                  .getLeftDuration(DateTime.now())
-                  .abs()
-                  .toString(),
-              name: 'LEFT TIME');
           var leftMinutes = tickedLeftTimeInSeconds ~/ 60;
           var leftSeconds = tickedLeftTimeInSeconds - (leftMinutes * 60);
 
           /// build here
-          /// check the reserveration
-
           return LayoutBuilder(builder: (context, constraints) {
             return SingleChildScrollView(
               child: ConstrainedBox(
@@ -331,8 +324,8 @@ class _ReservationScreenState extends State<ReservationScreen> {
                                 style: callOutTextStyle(),
                               ),
                               trailing: TextButton(
-                                onPressed: () =>
-                                    _handleRunningButtonOnPressed(reservedWashingMachine),
+                                onPressed: () => _handleRunningButtonOnPressed(
+                                    reservedWashingMachine),
                                 child: Text(
                                   '시작',
                                   style: bodyTextStyle(color: Colors.white),
