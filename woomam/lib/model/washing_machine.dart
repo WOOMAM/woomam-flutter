@@ -1,4 +1,3 @@
-
 import './enum.dart';
 
 import 'package:json_annotation/json_annotation.dart';
@@ -32,9 +31,10 @@ class WashingMachine {
   ///
   /// returns `Positive` when its reserved
   /// or else returns `Negative` when its expired
-  /// 
+  ///
   /// if the [bookedTime] is null, it returns `Duration 0`
-  Duration getLeftDuration(DateTime currentTime) => currentTime.toLocal().difference(bookedTime ?? currentTime);
+  Duration getLeftDuration(DateTime currentTime) =>
+      currentTime.toLocal().difference(bookedTime ?? currentTime);
 
   /// check the washing machine has reserved already
   /// based on current time
@@ -45,6 +45,17 @@ class WashingMachine {
     }
     return false;
   }
+
+  /// check process status
+  bool isReadyForRunningWashingMachine() =>
+      qrState == QRState.verified &&
+      washingMachineState == WashingMachineRunningState.turnedOn &&
+      arduinoState == ArduinoState.opened;
+
+  bool isReadyForInitWashingMachine() =>
+      qrState == QRState.verified &&
+      washingMachineState == WashingMachineRunningState.turnedOff &&
+      arduinoState == ArduinoState.closed;
 
   /// hanlde `JSON`
   factory WashingMachine.fromJson(Map<String, dynamic> json) =>
