@@ -27,7 +27,10 @@ Widget bottomRightRoundedBox(
       Container(
         width: width,
         height: height,
-        color: backgroundColor,
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.transparent),
+          color: backgroundColor,
+        ),
       ),
 
       /// card
@@ -42,6 +45,7 @@ Widget bottomRightRoundedBox(
             borderRadius:
                 BorderRadius.only(bottomRight: Radius.circular(width / 5.5)),
             color: cardColor,
+            border: Border.all(color: Colors.transparent)
           ),
 
           /// alignment

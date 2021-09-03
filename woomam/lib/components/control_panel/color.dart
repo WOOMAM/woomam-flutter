@@ -7,4 +7,6 @@ const Color textColor = Color(0xFF183152);
 const Color backgroundColor = Color(0xFFFFFFFF);
 const Color shallowPrimaryColor = Color(0xFFE1E6FA);
 
+const Color emphasizeColor = Color(0xFFE15546);
+
 const Color grey = Color(0xFFCDCDCD);
