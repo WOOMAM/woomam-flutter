@@ -64,7 +64,7 @@ class _QRcodeScreenState extends State<QRcodeScreen> {
   }
 
   void _onPermissionSet(BuildContext context, QRViewController ctrl, bool p) {
-    log('${DateTime.now().toIso8601String()}_onPermissionSet $p');
+    log('${DateTime.now().toIso8601String()}_onPermissionSet $p', name: 'QRCODE');
     if (!p) showCustomSnackbar(context: context, msg: 'no permission');
   }
 

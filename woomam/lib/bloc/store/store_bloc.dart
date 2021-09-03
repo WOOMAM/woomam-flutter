@@ -28,7 +28,7 @@ class StoreBloc extends Bloc<StoreEvent, StoreState> {
       yield StoreLoading();
       /// call the repository
       final response = await storeRespository.getAllStores();
-      log(response.toString());
+      log(response.toString(), name: 'StoreBLoC');
       yield StoresLoaded(stores: response);
     } catch (e) {
       yield StoreError(msg: e.toString());
