@@ -5,15 +5,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:woomam/bloc/bloc.dart';
+import 'package:woomam/model/model.dart';
 import 'dart:io' show Platform;
 
 import '../../control_panel/control_panels.dart';
 
 class QRCodeScreen extends StatefulWidget {
+  final bool isSecondQRCheck;
   final String phoneNumber;
-  final String washingMachineUID;
+  final WashingMachine washingMachine;
   const QRCodeScreen(
-      {Key? key, required this.phoneNumber, required this.washingMachineUID})
+      {Key? key,
+      required this.phoneNumber,
+      required this.washingMachine,
+      required this.isSecondQRCheck})
       : super(key: key);
 
   @override
@@ -69,12 +74,17 @@ class _QRCodeScreenState extends State<QRCodeScreen> {
       if (scannedResult != null) {
         /// dispose controller - QR
         this.controller!.dispose();
-
-        /// add event for QR check
-        BlocProvider.of<WashingMachineBloc>(context).add(
-            ConfirmUserToWashingMachineEvent(
-                currentUserPhoneNumber: widget.phoneNumber,
-                washingMachineUID: widget.washingMachineUID));
+        if (widget.isSecondQRCheck) {
+          /// add event for QR check
+          BlocProvider.of<WashingMachineBloc>(context).add(
+              InitWashingMachineEvent(washingMachine: widget.washingMachine));
+        } else {
+          /// add event for QR check
+          BlocProvider.of<WashingMachineBloc>(context).add(
+              ConfirmUserToWashingMachineEvent(
+                  currentUserPhoneNumber: widget.phoneNumber,
+                  washingMachineUID: widget.washingMachine.washingMachineUID));
+        }
         Navigator.pop(
             context,
             (res) =>
@@ -129,7 +139,9 @@ class _QRCodeScreenState extends State<QRCodeScreen> {
                     )
                   else
                     Text(
-                      '세탁기 옆 QR 코드를 스캔해보세요',
+                      widget.isSecondQRCheck
+                          ? 'QR코드 스캔 후 완성된 빨래를 찾아가세요 🤩'
+                          : '세탁기 옆 QR 코드를 스캔해 세탁기를 돌려보세요 🧐',
                       style: headlineTextStyle(color: Colors.white),
                     ),
                 ],

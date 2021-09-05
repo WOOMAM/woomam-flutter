@@ -129,17 +129,10 @@ class WashingMachineBloc
           phoneNumber: event.currentUserPhoneNumber,
         );
         if (response) {
-          final updatedWashingMachine = WashingMachine(
-            arduinoState: ArduinoState.opened,
-            qrState: QRState.verified,
-            washingMachineState: WashingMachineRunningState.turnedOn,
-            storeUID: prevState.reservedWashingMachine!.storeUID,
-            washingMachineUID:
-                prevState.reservedWashingMachine!.washingMachineUID,
-          );
+          final newWashingMachine = prevState.reservedWashingMachine!.getVerifiedWashingMachineModel();
           yield WashingMachineLoaded(
               washingMachines: prevState.washingMachines,
-              reservedWashingMachine: updatedWashingMachine);
+              reservedWashingMachine: newWashingMachine);
         }
       }
     } catch (e) {
@@ -157,17 +150,10 @@ class WashingMachineBloc
         final response = await washingMachineRepository.runWashingMachine(
             washingMachine: event.washingMachine);
         assert(response, 'running washing machine failed');
-        final updatedWashingMachine = WashingMachine(
-          arduinoState: ArduinoState.closed,
-          qrState: QRState.verified,
-          washingMachineState: WashingMachineRunningState.running,
-          storeUID: prevState.reservedWashingMachine!.storeUID,
-          washingMachineUID:
-              prevState.reservedWashingMachine!.washingMachineUID,
-        );
+        final newWashingMachine = event.washingMachine;
         yield WashingMachineLoaded(
             washingMachines: prevState.washingMachines,
-            reservedWashingMachine: updatedWashingMachine);
+            reservedWashingMachine: newWashingMachine);
       }
     } catch (e) {
       yield WashingMachineError(msg: e.toString());
@@ -201,7 +187,8 @@ class WashingMachineBloc
       if (state is WashingMachineLoaded) {
         yield WashingMachineLoading();
         final response = await washingMachineRepository.initWashingMachine(
-            washingMachineUID: event.washingMachine.washingMachineUID);
+            washingMachineUID: event.washingMachine.washingMachineUID,
+            phoneNumber: event.washingMachine.phoneNumber!);
         assert(response, 'could not init washing machine');
         yield WashingMachineLoaded(
             washingMachines: const [], reservedWashingMachine: null);

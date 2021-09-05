@@ -127,25 +127,23 @@ class WashingMachineRepository {
     final response = await http.post(url,
         headers: generateHeader(token: token),
         body: jsonEncode(washingMachine.toJson()));
+    if (response.statusCode == 200) {
+      /// parse the response
+      final parsedResponse = jsonDecode(utf8.decode(response.bodyBytes));
+      final bool parsedResult = parsedResponse['result'];
 
-    /// parse the response
-    final parsedResponse = jsonDecode(utf8.decode(response.bodyBytes));
-    final bool parsedResult = parsedResponse['result'];
-    final String parsedMessage = parsedResponse['message'];
-
-    /// check response
-    assert(response.statusCode == 200 && parsedResult,
-        'Run Washing Machine request message from server was $parsedMessage');
-
-    /// which will be `true`
-    return parsedResult;
+      /// which will be `true`
+      return parsedResult;
+    } else {
+      return false;
+    }
   }
 
   /// [POST], initialize washing machine
   ///
   /// returns `true` when the request was successful
   Future<bool> initWashingMachine(
-      {required String washingMachineUID, phoneNumber}) async {
+      {required String washingMachineUID,required String phoneNumber}) async {
     /// make `url` and `requestBody`
     final url = Uri.parse(ep.initWashingMachine);
     final requestBody = {

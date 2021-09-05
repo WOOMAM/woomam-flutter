@@ -14,8 +14,16 @@ import './qr_code.dart';
 import './running_washing_machine.dart';
 import '../../components.dart';
 
-final List<String> laundryType = ['표준', '소량/쾌속', '타월', '이불세탁', '삶음', '무세제통세척'];
-final List<int> laundryTimeInMinute = [100, 35, 60, 80, 120, 45];
+final List<String> laundryType = [
+  '표준',
+  '소량/쾌속',
+  '타월',
+  '이불세탁',
+  '삶음',
+  '무세제통세척',
+  '테스트'
+];
+final List<int> laundryTimeInMinute = [100, 35, 60, 80, 120, 45, 1];
 
 class ReservationScreen extends StatefulWidget {
   final String userPhoneNumber;
@@ -71,8 +79,19 @@ class _ReservationScreenState extends State<ReservationScreen> {
   /// handle the Running OnPressed
   void _handleRunningButtonOnPressed(WashingMachine reservedWashingMachine) {
     /// before emiting event please check `QRstate`
-    if (reservedWashingMachine.qrState == QRState.verified) {
+    if (reservedWashingMachine.isReadyForRunningWashingMachine()) {
       setState(() => isEnabled = !isEnabled);
+      if (_timer.isActive) _timer.cancel();
+      final uploadWashingMachine =
+          reservedWashingMachine.getRunningWashingMachineModel(
+              DateTime.now().add(Duration(
+                  minutes:
+                      laundryTimeInMinute[laundryType.indexOf(_selectedType)])),
+              DateTime.now());
+
+      /// add event
+      BlocProvider.of<WashingMachineBloc>(context)
+          .add(RunWashingMachineEvent(washingMachine: uploadWashingMachine));
 
       /// navigate
       Navigator.push(
@@ -81,7 +100,7 @@ class _ReservationScreenState extends State<ReservationScreen> {
         /// using [PageRouteBuilder] removes the basic navigation animation
         PageRouteBuilder(
           pageBuilder: (_, __, ___) => RunningWashingMachineScreen(
-            washingMachine: reservedWashingMachine,
+            washingMachine: uploadWashingMachine,
           ),
 
           /// the [transitionDuration] only handles
@@ -209,7 +228,7 @@ class _ReservationScreenState extends State<ReservationScreen> {
                                     ),
                                     blankBoxH(height: 8),
                                     Text(
-                                      '+8210-1234-5678',
+                                      '+82${widget.userPhoneNumber.substring(1)}',
                                       style: callOutTextStyle(color: grey),
                                     ),
                                   ],
@@ -261,19 +280,41 @@ class _ReservationScreenState extends State<ReservationScreen> {
                                 style: callOutTextStyle(),
                               ),
                               trailing: TextButton(
-                                onPressed: () => tickedLeftTimeInSeconds > 0
-                                    ? Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (_) => QRCodeScreen(
-                                                  washingMachineUID:
-                                                      reservedWashingMachine
-                                                          .washingMachineUID,
-                                                  phoneNumber:
-                                                      widget.userPhoneNumber,
-                                                )))
-                                    : showCustomSnackbar(
-                                        context: context, msg: '다시 예약해주세요 🥺'),
+                                onPressed: () =>
+
+                                    /// check if user is for Second-QR check
+                                    reservedWashingMachine
+                                            .isReadyForInitWashingMachine()
+                                        ? Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (_) => QRCodeScreen(
+                                                      isSecondQRCheck: true,
+                                                      washingMachine:
+                                                          reservedWashingMachine,
+                                                      phoneNumber: widget
+                                                          .userPhoneNumber,
+                                                    )))
+
+                                        /// check if user is for First-QR check
+                                        : reservedWashingMachine
+                                                .isWaitingForUserVerification(
+                                                    DateTime.now())
+                                            ? Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (_) =>
+                                                        QRCodeScreen(
+                                                          isSecondQRCheck:
+                                                              false,
+                                                          washingMachine:
+                                                              reservedWashingMachine,
+                                                          phoneNumber: widget
+                                                              .userPhoneNumber,
+                                                        )))
+                                            : showCustomSnackbar(
+                                                context: context,
+                                                msg: '다시 예약해주세요 🥺'),
                                 child: Text(
                                   'QR\nCODE',
                                   style: bodyTextStyle(color: Colors.white),
@@ -324,16 +365,27 @@ class _ReservationScreenState extends State<ReservationScreen> {
                                 style: headlineTextStyle(),
                               ),
                               subtitle: Text(
-                                _selectedType != ''
-                                    ? '선택하신 $_selectedType은 ${laundryTimeInMinute[laundryType.indexOf(_selectedType)]}분이 걸려요'
-                                    : '빨래를 선택해 보세요 🤩',
+                                !reservedWashingMachine
+                                        .isReadyForInitWashingMachine()
+                                    ? _selectedType != ''
+                                        ? '선택하신 $_selectedType은 ${laundryTimeInMinute[laundryType.indexOf(_selectedType)]}분이 걸려요'
+                                        : '빨래를 선택해 보세요 🤩'
+                                    : '빨래가 완료됐어요 😎',
                                 style: callOutTextStyle(),
                               ),
                               trailing: TextButton(
-                                onPressed: () => _handleRunningButtonOnPressed(
-                                    reservedWashingMachine),
+                                onPressed: () => !reservedWashingMachine
+                                        .isReadyForInitWashingMachine()
+                                    ? _handleRunningButtonOnPressed(
+                                        reservedWashingMachine)
+                                    : showCustomSnackbar(
+                                        context: context,
+                                        msg: '본인인증 후 빨래를 가져가 보세요'),
                                 child: Text(
-                                  '시작',
+                                  !reservedWashingMachine
+                                          .isReadyForInitWashingMachine()
+                                      ? '시작'
+                                      : '완료',
                                   style: bodyTextStyle(color: Colors.white),
                                   textAlign: TextAlign.center,
                                 ),
