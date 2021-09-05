@@ -32,12 +32,22 @@ class _RunningWashingMachineScreenState
   }
 
   @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
 
-    final currentPercentage =
+    var currentPercentage =
         widget.washingMachine.getPercentageOfProcess(DateTime.now());
+    
+    var leftTime = widget.washingMachine.taskFrom!.difference(DateTime.now()).inMinutes;
+    var leftTimeInHour = leftTime > 60 ? leftTime ~/ 60 : 0;
+    var leftTimeInMinute = leftTimeInHour > 0 ? leftTime - leftTimeInHour * 60 : leftTime;
 
     return Scaffold(
       backgroundColor: primaryColor,
@@ -58,13 +68,6 @@ class _RunningWashingMachineScreenState
               child: ListView(
                 shrinkWrap: true,
                 children: [
-                  /// running
-                  Align(
-                    child: Text('${widget.washingMachine.taskTo!.minute}분${widget.washingMachine.taskTo!.second}초',
-                        style: titleTextStyle(color: Colors.white)),
-                  ),
-                  blankBoxH(height: 30),
-
                   /// flaticon of washing machine is here
                   Stack(
                     alignment: Alignment.center,
@@ -89,7 +92,7 @@ class _RunningWashingMachineScreenState
                           borderColor: primaryColor,
                           direction: Axis.vertical,
                           center: Text(
-                            '${currentPercentage.ceil()}%',
+                            '${(currentPercentage * 100).toStringAsFixed(2)}%',
                             style: headlineTextStyle(color: secondaryColor),
                           ),
                         ),
@@ -99,12 +102,9 @@ class _RunningWashingMachineScreenState
 
                   blankBoxH(height: 30),
 
-                  /// percentage
-                  Align(
-                    child: Text(
-                      '89%',
-                      style: largeTitleTextStyle(color: Colors.white),
-                    ),
+                 Align(
+                    child: Text('$leftTimeInHour시간 $leftTimeInMinute분 남았어요',
+                        style: titleTextStyle(color: Colors.white)),
                   ),
                 ],
               ),

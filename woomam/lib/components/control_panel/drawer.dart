@@ -69,7 +69,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
           RichText(
             text: TextSpan(children: [
               TextSpan(text: '박재용', style: largeTitleTextStyle()),
-              TextSpan(text: '\n이 반가워', style: bodyTextStyle()),
+              TextSpan(text: '님', style: titleTextStyle()),
+              TextSpan(text: '\n 반가워요 👋', style: bodyTextStyle()),
             ]),
           ),
 
