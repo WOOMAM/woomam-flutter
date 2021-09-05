@@ -66,8 +66,48 @@ class WashingMachine {
 
   bool isReadyForInitWashingMachine() =>
       qrState == QRState.verified &&
-      washingMachineState == WashingMachineRunningState.turnedOff &&
-      arduinoState == ArduinoState.closed;
+      // this is ideal version
+      // washingMachineState == WashingMachineRunningState.turnedOff &&
+      // arduinoState == ArduinoState.closed
+      (taskTo != null && DateTime.now().isAfter(taskTo!.toLocal()));
+
+  /// define model to have copy
+  WashingMachine getRunningWashingMachineModel(DateTime from, DateTime to) =>
+      WashingMachine(
+        washingMachineState: WashingMachineRunningState.running,
+        arduinoState: ArduinoState.closed,
+        qrState: QRState.verified,
+        phoneNumber: phoneNumber,
+        taskFrom: from,
+        taskTo: to,
+        bookedTime: null,
+        storeUID: storeUID,
+        washingMachineUID: washingMachineUID,
+      );
+
+  WashingMachine getInitWashingMachineModel() => WashingMachine(
+        washingMachineState: WashingMachineRunningState.turnedOff,
+        arduinoState: ArduinoState.opened,
+        qrState: QRState.unchecked,
+        phoneNumber: phoneNumber,
+        taskFrom: null,
+        taskTo: null,
+        bookedTime: null,
+        storeUID: storeUID,
+        washingMachineUID: washingMachineUID,
+      );
+
+  WashingMachine getVerifiedWashingMachineModel() => WashingMachine(
+        washingMachineState: WashingMachineRunningState.turnedOn,
+        arduinoState: ArduinoState.opened,
+        qrState: QRState.verified,
+        phoneNumber: phoneNumber,
+        taskFrom: null,
+        taskTo: null,
+        bookedTime: null,
+        storeUID: storeUID,
+        washingMachineUID: washingMachineUID,
+      );
 
   /// hanlde `JSON`
   factory WashingMachine.fromJson(Map<String, dynamic> json) =>
