@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>889114343281-tcmv328f76vvc7itqlaijemj0nht952o.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.889114343281-tcmv328f76vvc7itqlaijemj0nht952o</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDCe_Un2MK7dHZPnQcbVx67sShCWyCJbGg</string>
+	<key>GCM_SENDER_ID</key>
+	<string>889114343281</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.woomam.laundry</string>
+	<key>PROJECT_ID</key>
+	<string>woomam</string>
+	<key>STORAGE_BUCKET</key>
+	<string>woomam.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:889114343281:ios:fa59554c3ea7b7f8b7e8d0</string>
+</dict>
+</plist>
