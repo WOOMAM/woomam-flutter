@@ -5,16 +5,15 @@ enum ArduinoState {
 }
 
 /// real washing machine
-enum WashingMachineState {
-  turnedOnOpened, // just turned on, not doing anything
-  // turnedOnClosed, // turned on and user has put laundry
+enum WashingMachineRunningState {
+  turnedOn, // just turned on, not doing anything
   running, // working
-  turnedOff, // dead
+  turnedOff, // dead - default
 }
 
 /// user have to check itself twice in use
 enum QRState {
   /// default - unchecked
-  unChecked,
+  unchecked,
   verified,
 }

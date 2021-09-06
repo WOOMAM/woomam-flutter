@@ -1,12 +1,13 @@
 /// set the URL end points here
 class EndPoint {
-  final String _baseURL = 'http://localhost:3000';
+  final String _baseURL = 'http://192.168.0.3:3000';
 
   /// each route's base
   final String signInRouter = '/signin';
   final String signUpRouter = '/signup';
   final String washingMachineRouter = '/wms';
   final String storeRouter = '/stores';
+  final String userRouter = '/users';
 
   /// get `baseURL`
   String get baseURL => _baseURL;
@@ -15,6 +16,8 @@ class EndPoint {
   String get signUp => _baseURL + signUpRouter;
   String get signIn => _baseURL + signInRouter;
   String get signOut => _baseURL + signInRouter + '/destroy';
+  /// get reserved washing machine with user phone number
+  String get reservedWashingMachine => _baseURL + userRouter + '/';
 
   /// washing machine
   String get allWashingMachines => _baseURL + washingMachineRouter + '/';

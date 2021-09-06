@@ -13,9 +13,7 @@ import 'package:woomam/model/washing_machine.dart';
 ///
 /// [WashingMachineLoading]: data is being fetched from the server
 ///
-/// [WashingMachineNotVerified]: got data but *needs user verification to use*
-///
-/// [WashingMachineVerified]: got data and able to occur any event
+/// [WashingMachineLoaded]: data is fetched
 abstract class WashingMachineState extends Equatable {}
 
 /// [WashingMachineEmpty]: no data is loaded in WashingMachine object
@@ -45,24 +43,16 @@ class WashingMachineLoading extends WashingMachineState {
   List<Object> get props => [];
 }
 
-/// [WashingMachineNotVerified]: got data but *needs user verification to use*
+/// [WashingMachineLoaded]: fetched data
 ///
-/// `get` method returns [washingMachine]
-class WashingMachineNotVerified extends WashingMachineState {
-  final WashingMachine washingMachine;
-  WashingMachineNotVerified({required this.washingMachine});
+/// `get` method returns [washingMachines, reservedWashingMachine!]
+class WashingMachineLoaded extends WashingMachineState {
+  final List<WashingMachine> washingMachines;
+  final WashingMachine? reservedWashingMachine;
+  WashingMachineLoaded(
+      {required this.washingMachines, required this.reservedWashingMachine});
 
+  /// be aware of : second props can be null
   @override
-  List<Object> get props => [washingMachine];
-}
-
-/// [WashingMachineVerified]: got data and able to occur any event
-///
-/// `get` method returns [washingMachine]
-class WashingMachineVerified extends WashingMachineState {
-  final WashingMachine washingMachine;
-  WashingMachineVerified({required this.washingMachine});
-
-  @override
-  List<Object> get props => [washingMachine];
+  List<Object> get props => [washingMachines, reservedWashingMachine!];
 }

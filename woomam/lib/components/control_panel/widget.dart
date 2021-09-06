@@ -27,7 +27,10 @@ Widget bottomRightRoundedBox(
       Container(
         width: width,
         height: height,
-        color: backgroundColor,
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.transparent),
+          color: backgroundColor,
+        ),
       ),
 
       /// card
@@ -42,6 +45,7 @@ Widget bottomRightRoundedBox(
             borderRadius:
                 BorderRadius.only(bottomRight: Radius.circular(width / 5.5)),
             color: cardColor,
+            border: Border.all(color: Colors.transparent)
           ),
 
           /// alignment
@@ -49,3 +53,8 @@ Widget bottomRightRoundedBox(
           padding: paddingHV(16, 8),
           child: child),
     ]);
+
+/// widgets used in differents states
+Widget emptyWidget = const Center(child: Text('정보가 없어요 🥺'));
+Widget loadingWidget = const Center(child: CircularProgressIndicator(color: secondaryColor));
+Widget errorWidget = const Center(child: Text('Error 😵'));

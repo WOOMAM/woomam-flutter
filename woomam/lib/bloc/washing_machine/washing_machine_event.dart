@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:woomam/model/model.dart';
 
 /// ## WashingMachineEvent
 ///
@@ -14,30 +15,29 @@ abstract class WashingMachineEvent extends Equatable {}
 
 /// [GetWashingMachineEvent]: no use of listener since it has high-cost, fetch data with refresh
 ///
-/// `get` method returns [washingMachineUID, reservedPhoneNumber]
+/// `get` method returns [storeUID]
 class GetStatsOfWashingMachineEvent extends WashingMachineEvent {
-  final String washingMachineUID;
-  final String reservedPhoneNumber;
+  final String storeUID;
 
-  GetStatsOfWashingMachineEvent(
-      {required this.reservedPhoneNumber, required this.washingMachineUID});
+  GetStatsOfWashingMachineEvent({required this.storeUID});
 
   @override
-  List<Object> get props => [washingMachineUID, reservedPhoneNumber];
+  List<Object> get props => [storeUID];
 }
 
 /// [ReserveWashingMachineEvent]: reserve a specific washing machine with current user's phonenumber
 ///
 /// `get` method returns [washingMachineUID, currentUserPhoneNumber]
 class ReserveWashingMachineEvent extends WashingMachineEvent {
-  final String washingMachineUID;
+  final WashingMachine reservedWashingMachine;
   final String currentUserPhoneNumber;
 
   ReserveWashingMachineEvent(
-      {required this.currentUserPhoneNumber, required this.washingMachineUID});
+      {required this.currentUserPhoneNumber,
+      required this.reservedWashingMachine});
 
   @override
-  List<Object> get props => [washingMachineUID, currentUserPhoneNumber];
+  List<Object> get props => [reservedWashingMachine, currentUserPhoneNumber];
 }
 
 /// [ConfirmCurrentUserEvent]: current user need to confirm to verify self to use washing machine
@@ -58,10 +58,26 @@ class ConfirmUserToWashingMachineEvent extends WashingMachineEvent {
 ///
 /// `get` method returns [washingMachineUID]
 class RunWashingMachineEvent extends WashingMachineEvent {
-  final String washingMachineUID;
+  final WashingMachine washingMachine;
 
-  RunWashingMachineEvent({required this.washingMachineUID});
+  RunWashingMachineEvent({required this.washingMachine});
 
   @override
-  List<Object> get props => [washingMachineUID];
+  List<Object> get props => [washingMachine];
+}
+
+class GetReservationInformationEvent extends WashingMachineEvent {
+  final String userPhoneNumber;
+  GetReservationInformationEvent({required this.userPhoneNumber});
+
+  @override
+  List<Object> get props => [userPhoneNumber];
+}
+
+class InitWashingMachineEvent extends WashingMachineEvent {
+  final WashingMachine washingMachine;
+  InitWashingMachineEvent({required this.washingMachine});
+
+  @override
+  List<Object> get props => [washingMachine];
 }

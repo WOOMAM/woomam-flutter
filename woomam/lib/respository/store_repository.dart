@@ -20,10 +20,13 @@ class StoreRespository {
     final url = Uri.parse(ep.allStores);
     /// wait for a response
     final response = await http.get(url, headers: generateHeader(token: token));
-    /// check the response
-    assert(response.statusCode == 200, 'getAllStores request received from server : ${response.statusCode}');
     /// parse result and return
     final parsedResult = jsonDecode(utf8.decode(response.bodyBytes));
-    return (parsedResult as List<dynamic>).map((e) => Store.fromJson(e)).toList();
+    final parsedMessage = parsedResult['message'];
+    final parsedData = parsedResult['data'] as List<dynamic>;
+    /// check the response
+    assert(response.statusCode == 200, 'getAllStores request received from server : $parsedMessage');
+    final result = parsedData.map((e) => Store.fromJson(e)).toList();
+    return result;
   }
 }

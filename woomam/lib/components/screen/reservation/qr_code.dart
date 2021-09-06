@@ -1,20 +1,31 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:woomam/bloc/bloc.dart';
+import 'package:woomam/model/model.dart';
 import 'dart:io' show Platform;
 
 import '../../control_panel/control_panels.dart';
 
-class QRcodeScreen extends StatefulWidget {
-  const QRcodeScreen({Key? key}) : super(key: key);
+class QRCodeScreen extends StatefulWidget {
+  final bool isSecondQRCheck;
+  final String phoneNumber;
+  final WashingMachine washingMachine;
+  const QRCodeScreen(
+      {Key? key,
+      required this.phoneNumber,
+      required this.washingMachine,
+      required this.isSecondQRCheck})
+      : super(key: key);
 
   @override
-  _QRcodeScreenState createState() => _QRcodeScreenState();
+  _QRCodeScreenState createState() => _QRCodeScreenState();
 }
 
-class _QRcodeScreenState extends State<QRcodeScreen> {
+class _QRCodeScreenState extends State<QRCodeScreen> {
   /// variables
   Barcode? scannedResult;
   QRViewController? controller;
@@ -60,11 +71,31 @@ class _QRcodeScreenState extends State<QRcodeScreen> {
       setState(() {
         scannedResult = scanData;
       });
+      if (scannedResult != null) {
+        /// dispose controller - QR
+        this.controller!.dispose();
+        if (widget.isSecondQRCheck) {
+          /// add event for QR check
+          BlocProvider.of<WashingMachineBloc>(context).add(
+              InitWashingMachineEvent(washingMachine: widget.washingMachine));
+        } else {
+          /// add event for QR check
+          BlocProvider.of<WashingMachineBloc>(context).add(
+              ConfirmUserToWashingMachineEvent(
+                  currentUserPhoneNumber: widget.phoneNumber,
+                  washingMachineUID: widget.washingMachine.washingMachineUID));
+        }
+        Navigator.pop(
+            context,
+            (res) =>
+                showCustomSnackbar(context: context, msg: 'QR 인증이 완료되었습니다'));
+      }
     });
   }
 
   void _onPermissionSet(BuildContext context, QRViewController ctrl, bool p) {
-    log('${DateTime.now().toIso8601String()}_onPermissionSet $p');
+    log('${DateTime.now().toIso8601String()}_onPermissionSet $p',
+        name: 'QRCODE');
     if (!p) showCustomSnackbar(context: context, msg: 'no permission');
   }
 
@@ -82,10 +113,12 @@ class _QRcodeScreenState extends State<QRcodeScreen> {
         title: const Text('QR CODE'),
         backgroundColor: primaryColor,
         actions: [
-          IconButton(onPressed: () async {
-                              await controller?.flipCamera();
-                              setState(() {});
-                            }, icon: const Icon(FeatherIcons.shuffle))
+          IconButton(
+              onPressed: () async {
+                await controller?.flipCamera();
+                setState(() {});
+              },
+              icon: const Icon(FeatherIcons.shuffle))
         ],
       ),
       body: Column(
@@ -100,10 +133,17 @@ class _QRcodeScreenState extends State<QRcodeScreen> {
                 children: <Widget>[
                   if (scannedResult != null)
                     Text(
-                        scannedResult!.code, style: headlineTextStyle(color: Colors.white),maxLines: null,)
+                      scannedResult!.code,
+                      style: headlineTextStyle(color: Colors.white),
+                      maxLines: null,
+                    )
                   else
-                    const Text('Scan a code'),
-                  
+                    Text(
+                      widget.isSecondQRCheck
+                          ? 'QR코드 스캔 후 완성된 빨래를 찾아가세요 🤩'
+                          : '세탁기 옆 QR 코드를 스캔해 세탁기를 돌려보세요 🧐',
+                      style: headlineTextStyle(color: Colors.white),
+                    ),
                 ],
               ),
             ),

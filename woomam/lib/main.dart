@@ -1,13 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:woomam/components/components.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import './bloc/bloc.dart';
+
+/// bloc & repository
+import './respository/repository.dart';
+
+/// config
+import 'package:flutter_config/flutter_config.dart';
 
 /// pages
 import 'package:woomam/components/screen/app.dart';
 
 /// component
+import 'package:woomam/components/components.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  /// requirements for FlutterConfig
+  WidgetsFlutterBinding.ensureInitialized();
+  await FlutterConfig.loadEnvVariables();
+  String token =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6IjAxMDc5MDc0MjQ0IiwiaWF0IjoxNjMwMjExMDMxLCJleHAiOjE2MzAyNTQyMzF9.M414ciIwjahfwpNJomM7zWENVi1JR8itBthWmh7TbSg';
+
+  /// run app
+  runApp(MultiBlocProvider(
+    providers: [
+      BlocProvider(
+          create: (context) =>
+              StoreBloc(storeRespository: StoreRespository(token: token))),
+      BlocProvider(
+          create: (context) => WashingMachineBloc(
+              washingMachineRepository:
+                  WashingMachineRepository(token: token))),
+    ],
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -21,7 +47,7 @@ class MyApp extends StatelessWidget {
 
       /// style
       theme: customThemeData,
-      
+
       /// display
       home: const RootScreen(),
     );
