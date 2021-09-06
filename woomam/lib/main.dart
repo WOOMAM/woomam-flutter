@@ -1,5 +1,7 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:woomam/components/screen/user/sign_in.dart';
 import './bloc/bloc.dart';
 
 /// bloc & repository
@@ -15,9 +17,11 @@ import 'package:woomam/components/screen/app.dart';
 import 'package:woomam/components/components.dart';
 
 void main() async {
-  /// requirements for FlutterConfig
+  /// requirements for FlutterConfig and Firebase
   WidgetsFlutterBinding.ensureInitialized();
   await FlutterConfig.loadEnvVariables();
+  /// requirements for Firebase
+  await Firebase.initializeApp();
   String token =
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6IjAxMDc5MDc0MjQ0IiwiaWF0IjoxNjMwMjExMDMxLCJleHAiOjE2MzAyNTQyMzF9.M414ciIwjahfwpNJomM7zWENVi1JR8itBthWmh7TbSg';
 
@@ -49,7 +53,8 @@ class MyApp extends StatelessWidget {
       theme: customThemeData,
 
       /// display
-      home: const RootScreen(),
+      // home: const RootScreen(),
+      home: const SignInScreen()
     );
   }
 }
