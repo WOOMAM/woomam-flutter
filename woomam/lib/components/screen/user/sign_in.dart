@@ -25,7 +25,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
   var countryCode = '+82';
   late TextEditingController _phoneNumberController;
-  late TextEditingController _pinCodeController;
+  late var _pinCode;
 
   /// handle firebase sign-in event
   _handleSignInButtonOnTapped(String number) async {
@@ -89,12 +89,14 @@ class _SignInScreenState extends State<SignInScreen> {
                     /// functions
                     appContext: context,
                     length: 6,
-                    onChanged: (String value) {},
-                    controller: _pinCodeController,
+                    onChanged: (String value) =>
+                        setState(() => _pinCode = value),
 
                     /// styles
+                    textStyle: headlineTextStyle(color: Colors.white),
                     pinTheme: PinTheme.defaults(
                       borderRadius: BorderRadius.circular(12.0),
+                      shape: PinCodeFieldShape.box,
                       inactiveColor: secondaryColor,
                       activeColor: primaryColor,
                       activeFillColor: primaryColor,
@@ -113,7 +115,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       PhoneAuthCredential _phoneAuthCredential =
                           PhoneAuthProvider.credential(
                               verificationId: verificationId,
-                              smsCode: _pinCodeController.text.trim());
+                              smsCode: _pinCode);
 
                       /// SignIn with the [_phoneAuthCredential]
                       final signedInUserCredential = await _firebaseAuth
@@ -153,13 +155,11 @@ class _SignInScreenState extends State<SignInScreen> {
   void initState() {
     super.initState();
     _phoneNumberController = TextEditingController();
-    _pinCodeController = TextEditingController();
   }
 
   @override
   void dispose() {
     _phoneNumberController.dispose();
-    _pinCodeController.dispose();
     super.dispose();
   }
 
