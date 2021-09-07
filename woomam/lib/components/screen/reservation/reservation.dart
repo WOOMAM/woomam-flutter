@@ -26,9 +26,7 @@ final List<String> laundryType = [
 final List<int> laundryTimeInMinute = [100, 35, 60, 80, 120, 45, 1];
 
 class ReservationScreen extends StatefulWidget {
-  final String userPhoneNumber;
-  const ReservationScreen({Key? key, required this.userPhoneNumber})
-      : super(key: key);
+  const ReservationScreen({Key? key}) : super(key: key);
 
   @override
   _ReservationScreenState createState() => _ReservationScreenState();
@@ -38,6 +36,7 @@ class _ReservationScreenState extends State<ReservationScreen> {
   /// variables
   late bool isEnabled;
   late String _selectedType;
+  late User currentUser;
 
   /// display timer
   late Timer _timer;
@@ -50,11 +49,19 @@ class _ReservationScreenState extends State<ReservationScreen> {
     /// init variables
     isEnabled = true;
     _selectedType = '';
+    final userState = BlocProvider.of<UserBloc>(context).state;
+    if (userState is UserLoaded) {
+      currentUser = userState.user;
+    } else {
+      /// which causes `error`
+      currentUser =
+          User(userName: 'none', phoneNumber: '', userUID: '', point: -1);
+    }
 
     /// add event to fetch data
     BlocProvider.of<WashingMachineBloc>(context).add(
         GetReservationInformationEvent(
-            userPhoneNumber: widget.userPhoneNumber));
+            userPhoneNumber: currentUser.phoneNumber));
 
     /// get state
     final washingMachineState =
@@ -133,10 +140,13 @@ class _ReservationScreenState extends State<ReservationScreen> {
     return BlocBuilder<WashingMachineBloc, WashingMachineState>(
         builder: (context, state) {
       if (state is WashingMachineEmpty) {
+        if (_timer.isActive) _timer.cancel();
         return emptyWidget;
       } else if (state is WashingMachineLoading) {
+        if (_timer.isActive) _timer.cancel();
         return loadingWidget;
       } else if (state is WashingMachineError) {
+        if (_timer.isActive) _timer.cancel();
         log('error \n' + state.msg, name: 'Reservation');
         return errorWidget;
       } else if (state is WashingMachineLoaded) {
@@ -217,18 +227,18 @@ class _ReservationScreenState extends State<ReservationScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      '안암점 WM1260',
+                                      reservedWashingMachine.washingMachineUID.substring(0,5),
                                       style: bodyTextStyle(color: Colors.white),
                                     ),
                                     blankBoxH(height: 8),
                                     Text(
-                                      '박재용님',
+                                      currentUser.userName,
                                       style: headlineTextStyle(
                                           color: Colors.white),
                                     ),
                                     blankBoxH(height: 8),
                                     Text(
-                                      '+82${widget.userPhoneNumber.substring(1)}',
+                                      currentUser.phoneNumber.substring(1),
                                       style: callOutTextStyle(color: grey),
                                     ),
                                   ],
@@ -292,8 +302,8 @@ class _ReservationScreenState extends State<ReservationScreen> {
                                                       isSecondQRCheck: true,
                                                       washingMachine:
                                                           reservedWashingMachine,
-                                                      phoneNumber: widget
-                                                          .userPhoneNumber,
+                                                      phoneNumber: currentUser
+                                                          .phoneNumber,
                                                     )))
 
                                         /// check if user is for First-QR check
@@ -309,8 +319,9 @@ class _ReservationScreenState extends State<ReservationScreen> {
                                                               false,
                                                           washingMachine:
                                                               reservedWashingMachine,
-                                                          phoneNumber: widget
-                                                              .userPhoneNumber,
+                                                          phoneNumber:
+                                                              currentUser
+                                                                  .phoneNumber,
                                                         )))
                                             : showCustomSnackbar(
                                                 context: context,
@@ -409,6 +420,7 @@ class _ReservationScreenState extends State<ReservationScreen> {
             );
           });
         } else {
+          if (_timer.isActive) _timer.cancel();
           return Padding(
             padding: paddingHV(24, 24),
             child: Center(

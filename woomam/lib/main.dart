@@ -59,8 +59,6 @@ class MyApp extends StatelessWidget {
       theme: customThemeData,
 
       /// display
-      // home: const RootScreen(),
-      // home: const SignInScreen(),
       home: const CustomRouter(),
     );
   }
