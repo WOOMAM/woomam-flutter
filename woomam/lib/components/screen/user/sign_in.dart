@@ -2,9 +2,11 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:intl_phone_field/phone_number.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:woomam/bloc/bloc.dart';
 import 'package:woomam/components/control_panel/control_panels.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -124,12 +126,14 @@ class _SignInScreenState extends State<SignInScreen> {
                       /// pop screen first
                       Navigator.pop(context);
                       if (signedInUserCredential.user != null) {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) => const RootScreen())).then(
-                            (value) => showCustomSnackbar(
-                                context: context, msg: '로그인 성공 😎'));
+                        /// add event
+                        BlocProvider.of<UserBloc>(context).add(SignInEvent(
+                            phoneNumber:
+                                signedInUserCredential.user!.phoneNumber!,
+                            uuid: signedInUserCredential.user!.uid));
+
+                        /// add custom snackbar
+                        showCustomSnackbar(context: context, msg: '로그인 성공 😎');
                       } else {
                         showCustomSnackbar(context: context, msg: '로그인 실패 😭');
                       }
