@@ -1,6 +1,6 @@
 /// set the URL end points here
 class EndPoint {
-  final String _baseURL = 'http://192.168.0.3:3000';
+  final String _baseURL = 'http://35.213.84.65';
 
   /// each route's base
   final String signInRouter = '/signin';
