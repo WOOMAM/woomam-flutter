@@ -1,5 +1,9 @@
+import 'package:adaptive_dialog/adaptive_dialog.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:woomam/bloc/bloc.dart';
 
 import '../control_panel/control_panels.dart';
 
@@ -42,10 +46,17 @@ class _CustomDrawerState extends State<CustomDrawer> {
         onTap: () => _handleOnTapped(index),
       );
 
+  /// TODO link with server
+  void handleSignOut() {
+    FirebaseAuth.instance.signOut().then((value) => showCustomSnackbar(context: context, msg: '로그아웃 되었습니다'));
+  }
+
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
+    final userName =
+        (BlocProvider.of<UserBloc>(context).state as UserLoaded).user.userName;
 
     /// build components
     return Container(
@@ -65,10 +76,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           /// personal information
-          /// TODO link with user
           RichText(
             text: TextSpan(children: [
-              TextSpan(text: '박재용', style: largeTitleTextStyle()),
+              TextSpan(text: userName, style: largeTitleTextStyle()),
               TextSpan(text: '님', style: titleTextStyle()),
               TextSpan(text: '\n 반가워요 👋', style: bodyTextStyle()),
             ]),
@@ -87,9 +97,14 @@ class _CustomDrawerState extends State<CustomDrawer> {
           ),
 
           /// sign-out
-          const ListTile(
-            leading: Icon(FeatherIcons.logOut),
-            title: Text('로그아웃'),
+          ListTile(
+            leading: const Icon(FeatherIcons.logOut),
+            title: const Text('로그아웃'),
+            onTap: () => showAlertDialog(
+                context: context,
+                title: '개발중이에요',
+                message: '예선통과할 수 있을까요? 🥺',
+                actions: [const AlertDialogAction(key: 'yes', label: '그럼요!')]),
           ),
         ],
       ),

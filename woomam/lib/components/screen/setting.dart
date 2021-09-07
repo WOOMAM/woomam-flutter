@@ -1,3 +1,4 @@
+import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:woomam/components/control_panel/control_panels.dart';
@@ -19,9 +20,20 @@ class _SettingScreenState extends State<SettingScreen> {
         '내 정보 변경',
         style: bodyTextStyle(),
       ),
-      'leading': const Icon(FeatherIcons.user, color: primaryColor,)
+      'leading': const Icon(
+        FeatherIcons.user,
+        color: primaryColor,
+      )
     },
   ];
+
+  _eventsOnTapped() => [
+        () => showAlertDialog(
+            context: context,
+            title: '개발중이에요',
+            message: '예선통과할 수 있을까요? 🥺',
+            actions: [const AlertDialogAction(key: 'yes', label: '그럼요!')]),
+      ];
 
   @override
   void initState() {
@@ -53,9 +65,9 @@ class _SettingScreenState extends State<SettingScreen> {
                 style: largeTitleTextStyle(),
               ),
             ),
-    
+
             blankBoxH(height: 20),
-    
+
             /// use [Expanded] to make it scrollable
             Expanded(
               child: Scrollbar(
@@ -66,6 +78,7 @@ class _SettingScreenState extends State<SettingScreen> {
                   itemBuilder: (context, index) => ListTile(
                     leading: _settingItems[index]['leading'],
                     title: _settingItems[index]['name'],
+                    onTap: _eventsOnTapped()[index],
                   ),
                   separatorBuilder: (context, index) => blankBoxH(height: 10),
                   itemCount: _settingItems.length,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:woomam/bloc/bloc.dart';
+import 'package:woomam/model/model.dart';
 import '../control_panel/control_panels.dart';
 
 /// pages
@@ -19,18 +20,26 @@ class RootScreen extends StatefulWidget {
 class _RootScreenState extends State<RootScreen> {
   late int _currentIndex;
   late List<Widget> _bodyChildren;
+  late User currentUser;
 
   @override
   void initState() {
     super.initState();
 
     /// init variables
+    final userState = BlocProvider.of<UserBloc>(context).state;
+    if (userState is UserLoaded) {
+      currentUser = userState.user;
+    } else {
+      /// which causes `error`
+      currentUser =
+          User(userName: 'none', phoneNumber: '', userUID: '', point: -1);
+    }
+
     _currentIndex = 0;
     _bodyChildren = const [
       HomeScreen(),
-      ReservationScreen(
-        userPhoneNumber: '01079074244',
-      ),
+      ReservationScreen(),
       SettingScreen(),
     ];
   }
@@ -40,7 +49,7 @@ class _RootScreenState extends State<RootScreen> {
     /// add events to get new information from server
     if (index == 1) {
       BlocProvider.of<WashingMachineBloc>(context)
-          .add(GetReservationInformationEvent(userPhoneNumber: '01079074244'));
+          .add(GetReservationInformationEvent(userPhoneNumber: currentUser.phoneNumber));
     }
 
     /// change index
