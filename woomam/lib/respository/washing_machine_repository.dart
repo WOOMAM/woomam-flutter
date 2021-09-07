@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:woomam/respository/header.dart';
 
 /// import model
@@ -15,10 +16,10 @@ import './end_point.dart';
 ///
 /// WashingMachineRespository will be usable after the user signed-in
 class WashingMachineRepository {
-  String token;
+  SharedPreferences prefs;
 
   /// set token when it constructs
-  WashingMachineRepository({required this.token});
+  WashingMachineRepository({required this.prefs});
 
   /// set end point manager class
   final ep = EndPoint();
@@ -29,6 +30,9 @@ class WashingMachineRepository {
   Future<List<WashingMachine>> getAllWashingMachinesFromSpecificStore({
     required String storeUID,
   }) async {
+    /// get token
+    final token = prefs.getString('token')!;
+
     /// make `url` and `param`
     final url = Uri.parse(ep.allWashingMachines + storeUID);
 
@@ -59,6 +63,9 @@ class WashingMachineRepository {
     required String bookedTime,
     required String phoneNumber,
   }) async {
+    /// get token
+    final token = prefs.getString('token')!;
+
     /// make `url` and `requestBody`
     final url = Uri.parse(ep.reserve);
     final requestBody = {
@@ -91,6 +98,9 @@ class WashingMachineRepository {
     required String washingMachineUID,
     required String phoneNumber,
   }) async {
+    /// get token
+    final token = prefs.getString('token')!;
+
     /// make `url` and `requestBody`
     final url = Uri.parse(ep.qrCheck);
     final requestBody = {
@@ -120,6 +130,9 @@ class WashingMachineRepository {
   /// returns `true` when the request was successful
   Future<bool> runWashingMachine(
       {required WashingMachine washingMachine}) async {
+    /// get token
+    final token = prefs.getString('token')!;
+
     /// make `url`
     final url = Uri.parse(ep.runWashingMachine);
 
@@ -143,7 +156,10 @@ class WashingMachineRepository {
   ///
   /// returns `true` when the request was successful
   Future<bool> initWashingMachine(
-      {required String washingMachineUID,required String phoneNumber}) async {
+      {required String washingMachineUID, required String phoneNumber}) async {
+    /// get token
+    final token = prefs.getString('token')!;
+
     /// make `url` and `requestBody`
     final url = Uri.parse(ep.initWashingMachine);
     final requestBody = {
@@ -170,6 +186,9 @@ class WashingMachineRepository {
 
   Future<dynamic> getReservationInformation(
       {required String phoneNumber}) async {
+    /// get token
+    final token = prefs.getString('token')!;
+
     /// make request
     final url = Uri.parse(ep.reservedWashingMachine);
     final requetsBody = {"phoneNumber": phoneNumber};
