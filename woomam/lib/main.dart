@@ -1,8 +1,11 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import './bloc/bloc.dart';
 
 /// bloc & repository
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:woomam/components/screen/route.dart';
+import './bloc/bloc.dart';
 import './respository/repository.dart';
 
 /// config
@@ -13,24 +16,31 @@ import 'package:woomam/components/screen/app.dart';
 
 /// component
 import 'package:woomam/components/components.dart';
+import 'package:woomam/components/screen/user/sign_in.dart';
 
 void main() async {
-  /// requirements for FlutterConfig
+  /// requirements for FlutterConfig and Firebase
   WidgetsFlutterBinding.ensureInitialized();
   await FlutterConfig.loadEnvVariables();
-  String token =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6IjAxMDc5MDc0MjQ0IiwiaWF0IjoxNjMwMjExMDMxLCJleHAiOjE2MzAyNTQyMzF9.M414ciIwjahfwpNJomM7zWENVi1JR8itBthWmh7TbSg';
+
+  /// requirements for Firebase
+  await Firebase.initializeApp();
+
+  final prefs = await SharedPreferences.getInstance();
 
   /// run app
   runApp(MultiBlocProvider(
     providers: [
       BlocProvider(
           create: (context) =>
-              StoreBloc(storeRespository: StoreRespository(token: token))),
+              UserBloc(userRepository: UserRepository(prefs: prefs))),
+      BlocProvider(
+          create: (context) =>
+              StoreBloc(storeRespository: StoreRespository(prefs: prefs))),
       BlocProvider(
           create: (context) => WashingMachineBloc(
               washingMachineRepository:
-                  WashingMachineRepository(token: token))),
+                  WashingMachineRepository(prefs: prefs))),
     ],
     child: const MyApp(),
   ));
@@ -49,7 +59,9 @@ class MyApp extends StatelessWidget {
       theme: customThemeData,
 
       /// display
-      home: const RootScreen(),
+      // home: const RootScreen(),
+      // home: const SignInScreen(),
+      home: const CustomRouter(),
     );
   }
 }

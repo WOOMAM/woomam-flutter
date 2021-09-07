@@ -19,12 +19,13 @@ abstract class UserEvent extends Equatable {}
 /// ### SignInEvent
 /// means the current User is willing to sign-in via Firebase
 ///
-/// `get` method returns [String phoneNumber]
+/// `get` method returns [String phoneNumber, String uuid]
 class SignInEvent extends UserEvent {
   final String phoneNumber;
-  SignInEvent({required this.phoneNumber});
+  final String uuid;
+  SignInEvent({required this.phoneNumber, required this.uuid});
   @override
-  List<Object> get props => [phoneNumber];
+  List<Object> get props => [phoneNumber, uuid];
 }
 
 /// ### SignOutEvent

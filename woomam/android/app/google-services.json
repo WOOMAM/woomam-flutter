@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "889114343281",
+    "project_id": "woomam",
+    "storage_bucket": "woomam.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:889114343281:android:d0208a5f87c7c821b7e8d0",
+        "android_client_info": {
+          "package_name": "com.example.woomam"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "889114343281-7p3054ih0gohck9k85n598ba71vfeikd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAnIezAUUtalhuBC3vO_1ithiMbbPLR5l0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "889114343281-7p3054ih0gohck9k85n598ba71vfeikd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

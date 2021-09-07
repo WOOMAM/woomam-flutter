@@ -27,14 +27,14 @@ class UserEmpty extends UserState {
   List<Object> get props => [];
 }
 
-/// ### UserNeeedInformation
-/// means the current User is not Empty but need the information
-///
-/// `get` returns []
-class UserNeedInformation extends UserState {
-  @override
-  List<Object> get props => [];
-}
+// /// ### UserNeeedInformation
+// /// means the current User is not Empty but need the information
+// ///
+// /// `get` returns []
+// class UserNeedInformation extends UserState {
+//   @override
+//   List<Object> get props => [];
+// }
 
 /// ### UserError
 /// means the current User has some Errors
