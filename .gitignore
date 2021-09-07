@@ -9,3 +9,7 @@ woomam/ios/build/
 .idea/runConfigurations.xml
 .idea/modules.xml
 
+woomam/gradlew
+woomam/gradlew.bat
+woomam/.gradle/
+woomam/gradle/
