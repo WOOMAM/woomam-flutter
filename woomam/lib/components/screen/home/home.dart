@@ -21,7 +21,8 @@ import '../../components.dart';
 import 'home_search_bar.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  final String phoneNumber;
+  const HomeScreen({Key? key, required this.phoneNumber}) : super(key: key);
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -94,7 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
             context: context,
             builder: (_) => ReservationBottomSheet(
               store: store,
-              userPhoneNumber: '01079074244',
+              userPhoneNumber: widget.phoneNumber,
             ),
           ),
         ),
