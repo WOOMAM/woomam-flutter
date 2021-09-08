@@ -37,20 +37,19 @@ class _RootScreenState extends State<RootScreen> {
     }
 
     _currentIndex = 0;
-    _bodyChildren = const [
-      HomeScreen(),
-      ReservationScreen(),
-      SettingScreen(),
+    _bodyChildren = [
+      HomeScreen(phoneNumber: currentUser.phoneNumber),
+      const ReservationScreen(),
+      const SettingScreen(),
     ];
   }
 
   /// handle the bottom navigation bar index change
   void _handleIndexChange(int index) {
     /// add events to get new information from server
-    if (index == 1) {
-      BlocProvider.of<WashingMachineBloc>(context)
-          .add(GetReservationInformationEvent(userPhoneNumber: currentUser.phoneNumber));
-    }
+    BlocProvider.of<WashingMachineBloc>(context).add(
+        GetReservationInformationEvent(
+            userPhoneNumber: currentUser.phoneNumber));
 
     /// change index
     setState(() => _currentIndex = index);
