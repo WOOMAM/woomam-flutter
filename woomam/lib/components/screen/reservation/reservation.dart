@@ -58,10 +58,7 @@ class _ReservationScreenState extends State<ReservationScreen> {
           User(userName: 'none', phoneNumber: '', userUID: '', point: -1);
     }
 
-    /// add event to fetch data
-    BlocProvider.of<WashingMachineBloc>(context).add(
-        GetReservationInformationEvent(
-            userPhoneNumber: currentUser.phoneNumber));
+  
 
     /// get state
     final washingMachineState =
@@ -123,7 +120,9 @@ class _ReservationScreenState extends State<ReservationScreen> {
           reverseTransitionDuration: const Duration(milliseconds: 800),
           fullscreenDialog: true,
         ),
-      );
+      ).whenComplete(() {
+        if(_timer.isActive) _timer.cancel();
+      });
     } else {
       showCustomSnackbar(context: context, msg: '본인인증을 해주세요');
     }
@@ -140,13 +139,10 @@ class _ReservationScreenState extends State<ReservationScreen> {
     return BlocBuilder<WashingMachineBloc, WashingMachineState>(
         builder: (context, state) {
       if (state is WashingMachineEmpty) {
-        if (_timer.isActive) _timer.cancel();
         return emptyWidget;
       } else if (state is WashingMachineLoading) {
-        if (_timer.isActive) _timer.cancel();
         return loadingWidget;
       } else if (state is WashingMachineError) {
-        if (_timer.isActive) _timer.cancel();
         log('error \n' + state.msg, name: 'Reservation');
         return errorWidget;
       } else if (state is WashingMachineLoaded) {
@@ -157,11 +153,11 @@ class _ReservationScreenState extends State<ReservationScreen> {
           /// calculate time in minutes
           var tickedLeftTimeInSeconds = reservedWashingMachine
               .getLeftDuration(DateTime.now())
-              .abs()
               .inSeconds;
           var leftMinutes = tickedLeftTimeInSeconds ~/ 60;
           var leftSeconds = tickedLeftTimeInSeconds - (leftMinutes * 60);
-
+          log(reservedWashingMachine.washingMachineUID, name: 'washing-machine-UID');
+          log('${reservedWashingMachine.getLeftDuration(DateTime.now().toUtc().toLocal())}');
           /// build here
           return LayoutBuilder(builder: (context, constraints) {
             return SingleChildScrollView(
@@ -227,7 +223,7 @@ class _ReservationScreenState extends State<ReservationScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      reservedWashingMachine.washingMachineUID.substring(0,5),
+                                      'ID : ' + reservedWashingMachine.washingMachineUID.substring(0,5),
                                       style: bodyTextStyle(color: Colors.white),
                                     ),
                                     blankBoxH(height: 8),
@@ -238,7 +234,7 @@ class _ReservationScreenState extends State<ReservationScreen> {
                                     ),
                                     blankBoxH(height: 8),
                                     Text(
-                                      currentUser.phoneNumber.substring(1),
+                                      currentUser.phoneNumber,
                                       style: callOutTextStyle(color: grey),
                                     ),
                                   ],
@@ -420,7 +416,6 @@ class _ReservationScreenState extends State<ReservationScreen> {
             );
           });
         } else {
-          if (_timer.isActive) _timer.cancel();
           return Padding(
             padding: paddingHV(24, 24),
             child: Center(
