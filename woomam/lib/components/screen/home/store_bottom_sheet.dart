@@ -84,43 +84,45 @@ class _ReservationBottomSheetState extends State<ReservationBottomSheet> {
                 ),
                 blankBoxH(height: 20),
                 washingMachines.isNotEmpty
-                    ? ListView.separated(
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          final isReserved = washingMachines[index]
-                              .isWashingMachineReserved(
-                                  DateTime.now());
-
-                          return ListTile(
-                            title: Text(
-                              '${index + 1} 번째 세탁기',
-                              style: headlineTextStyle(),
-                            ),
-
-                            /// emit event when the button is clicked
-                            trailing: TextButton(
-                              onPressed: () => _handleReserveButtonOnTap(
-                                isReserved: isReserved,
-                                reservedWashingMachine: washingMachines[index],
+                    ? Expanded(
+                      child: ListView.separated(
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            final isReserved = washingMachines[index]
+                                .isWashingMachineReserved(
+                                    DateTime.now());
+                    
+                            return ListTile(
+                              title: Text(
+                                '${index + 1} 번째 세탁기',
+                                style: headlineTextStyle(),
                               ),
-                              child: Text(
-                                isReserved ? '사용중' : '신청',
-                                style: bodyTextStyle(color: Colors.white),
-                              ),
-                              style: TextButton.styleFrom(
-                                backgroundColor:
-                                    isReserved ? secondaryColor : primaryColor,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
+                    
+                              /// emit event when the button is clicked
+                              trailing: TextButton(
+                                onPressed: () => _handleReserveButtonOnTap(
+                                  isReserved: isReserved,
+                                  reservedWashingMachine: washingMachines[index],
+                                ),
+                                child: Text(
+                                  isReserved ? '사용중' : '신청',
+                                  style: bodyTextStyle(color: Colors.white),
+                                ),
+                                style: TextButton.styleFrom(
+                                  backgroundColor:
+                                      isReserved ? secondaryColor : primaryColor,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
                                 ),
                               ),
-                            ),
-                          );
-                        },
-                        separatorBuilder: (context, index) =>
-                            blankBoxH(height: 10),
-                        itemCount: washingMachines.length,
-                      )
+                            );
+                          },
+                          separatorBuilder: (context, index) =>
+                              blankBoxH(height: 10),
+                          itemCount: washingMachines.length,
+                        ),
+                    )
                     : Expanded(
                         child: Center(
                           child: Text(
