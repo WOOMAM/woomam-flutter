@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import './enum.dart';
 
 import 'package:json_annotation/json_annotation.dart';
@@ -39,8 +41,23 @@ class WashingMachine {
   /// or else returns `Negative` when its expired
   ///
   /// if the [bookedTime] is null, it returns `Duration 0`
-  Duration getLeftDuration(DateTime currentTime) =>
-      currentTime.toLocal().difference(bookedTime ?? currentTime);
+  Duration getLeftDuration(DateTime currentTime) {
+    if (bookedTime != null) {
+      /// found that DateTime doesn't get current Local time.. when it subtracts
+      final from = DateTime(
+          currentTime.year,
+          currentTime.month,
+          currentTime.day,
+          currentTime.hour,
+          currentTime.minute,
+          currentTime.second);
+      final to = DateTime(bookedTime!.year, bookedTime!.month, bookedTime!.day,
+          bookedTime!.hour, bookedTime!.minute, bookedTime!.second);
+      log(bookedTime!.toIso8601String() + '\t' + currentTime.toIso8601String());
+      return from.difference(to);
+    }
+    return const Duration(minutes: 0);
+  }
 
   /// check the washing machine has reserved already
   /// based on current time
