@@ -11,12 +11,8 @@ import './respository/repository.dart';
 /// config
 import 'package:flutter_config/flutter_config.dart';
 
-/// pages
-import 'package:woomam/components/screen/app.dart';
-
 /// component
 import 'package:woomam/components/components.dart';
-import 'package:woomam/components/screen/user/sign_in.dart';
 
 void main() async {
   /// requirements for FlutterConfig and Firebase

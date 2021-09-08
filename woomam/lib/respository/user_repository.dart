@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:dio_http/dio_http.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
