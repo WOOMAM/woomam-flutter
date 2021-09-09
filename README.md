@@ -2,11 +2,11 @@
 
 우아한코끼리(우코) Flutter 앱 개발 담당 이승환(@seunghwanly)입니다. 본 애플리케이션은 손쉬운 본인인증으로 이용하는 비대면 예약 코인빨래방을 위한 데모 애플리케이션입니다.
 <p align="center">
-  <a href='#features'>Features ◦ </a>
-  <a href='#used'>Used ◦ </a>
-  <a href='#models'>Models ◦ </a>
-  <a href='#structure'>Structure ◦ </a>
-  <a href='#usage'>Usage</a>
+  <a href="#features">Features ◦ </a>
+  <a href="#used">Used ◦ </a>
+  <a href="#models">Models ◦ </a>
+  <a href="#structure">Structure ◦ </a>
+  <a href="#usage">Usage</a>
 </p>
 
 ---
@@ -25,7 +25,7 @@
 이번 프로젝트에서는 **BLoC** 패턴을 사용하였습니다. 흔히 알려진 MVVM과 비슷한 구조로 state 변화가 많고 그에 따른 cost가 높아 효율적으로 사용하기 위해 BLoC패턴을 채택했습니다. Stream을 통해 데이터를 관리하고 사용자에게 맞는 UI를 보여줍니다.
 
 ### BLoC pattern 예시
-
+![Owler Structure@2x](https://user-images.githubusercontent.com/22142225/132606092-c3b3af86-1e0e-44d1-ab70-1320541c45ba.png)
 
 ---
 
